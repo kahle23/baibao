@@ -1,6 +1,6 @@
 package misaka.storage.object;
 
-import artoria.data.AbstractExtendedData;
+import artoria.data.AbstractExtraData;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * The stored result of the object.
  * @author Kahle
  */
-public class StorageResult extends AbstractExtendedData implements Serializable {
+public class StorageResult extends AbstractExtraData implements Serializable {
     /**
      * Business id.
      */

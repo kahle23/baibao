@@ -1,6 +1,6 @@
 package misaka.sms;
 
-import artoria.data.AbstractExtendedData;
+import artoria.data.AbstractExtraData;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,7 +9,7 @@ import java.util.Date;
  * Short messaging service query result object.
  * @author Kahle
  */
-public class SmsQueryResult extends AbstractExtendedData implements Serializable {
+public class SmsQueryResult extends AbstractExtraData implements Serializable {
     /**
      * Country calling code.
      * @see <a href="https://en.wikipedia.org/wiki/List_of_country_calling_codes">Country calling code</a>

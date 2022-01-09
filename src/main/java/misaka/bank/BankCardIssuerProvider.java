@@ -1,16 +1,16 @@
 package misaka.bank;
 
 /**
- * Bank card issuer provider.
+ * The bank card issuer provider.
  * @author Kahle
  */
 public interface BankCardIssuerProvider {
 
     /**
      * Query the bank card issuer according to the bank card number.
-     * @param bankCardNumber Bank card number
-     * @return Bank card issuer object
+     * @param bankCardNumber The bank card number
+     * @return The bank card issuer
      */
-    BankCardIssuer findBankCardIssuer(String bankCardNumber);
+    BankCardIssuer issuerInfo(String bankCardNumber);
 
 }

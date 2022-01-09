@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.kahlkn</groupId>
     <artifactId>misaka</artifactId>
-    <version>0.0.1.20190433-SNAPSHOT</version>
+    <version>1.0.0.20210917f.beta</version>
     <packaging>jar</packaging>
     <name>Misaka</name>
     <url>https://github.com/kahlkn/misaka</url>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.github.kahlkn</groupId>
             <artifactId>artoria</artifactId>
-            <version>1.0.0.2019102003-SNAPSHOT</version>
+            <version>1.0.0.20210917f.beta</version>
         </dependency>
 
         <dependency>
@@ -126,7 +126,7 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
@@ -136,9 +136,12 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <!--<configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>-->
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,6 +1,6 @@
 package misaka.storage.object;
 
-import artoria.data.AbstractExtendedData;
+import artoria.data.AbstractExtraData;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Object storage authorization request.
  * @author Kahle
  */
-public class AuthorizationRequest extends AbstractExtendedData implements Serializable {
+public class AuthorizationRequest extends AbstractExtraData implements Serializable {
     /**
      * The name of the bucket.
      */

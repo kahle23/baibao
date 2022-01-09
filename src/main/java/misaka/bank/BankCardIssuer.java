@@ -1,12 +1,20 @@
 package misaka.bank;
 
+import artoria.data.AbstractExtraData;
+
+import java.io.Serializable;
+
 /**
- * Bank card issuer object.
+ * The bank card issuer.
  * @see <a href="https://en.wikipedia.org/wiki/Bank_card">Bank card</a>
  * @see <a href="https://en.wikipedia.org/wiki/Issuing_bank">Issuing bank</a>
  * @author Kahle
  */
-public class BankCardIssuer {
+public class BankCardIssuer extends AbstractExtraData implements Serializable {
+    /**
+     * The bank card number.
+     */
+    private String bankCardNumber;
     /**
      * The bank name of the card.
      */
@@ -16,30 +24,32 @@ public class BankCardIssuer {
      */
     private String organizationCode;
     /**
-     * Bank card name.
+     * The bank card name.
      */
     private String bankCardName;
     /**
-     * Bank card type.
+     * The bank card type.
      */
     private String bankCardType;
     /**
-     * Issuer identification number.
+     * The bank card number length.
+     */
+    private String bankCardNumberLength;
+    /**
+     * The issuer identification number.
      * @see <a href="https://en.wikipedia.org/wiki/Payment_card_number">Payment card number</a>
      */
     private String issuerIdentificationNumber;
-    /**
-     * The country where the card is located.
-     */
-    private String country;
-    /**
-     * Bank card number.
-     */
-    private String bankCardNumber;
-    /**
-     * Bank card number length.
-     */
-    private String bankCardNumberLength;
+
+    public String getBankCardNumber() {
+
+        return bankCardNumber;
+    }
+
+    public void setBankCardNumber(String bankCardNumber) {
+
+        this.bankCardNumber = bankCardNumber;
+    }
 
     public String getBankName() {
 
@@ -81,36 +91,6 @@ public class BankCardIssuer {
         this.bankCardType = bankCardType;
     }
 
-    public String getIssuerIdentificationNumber() {
-
-        return issuerIdentificationNumber;
-    }
-
-    public void setIssuerIdentificationNumber(String issuerIdentificationNumber) {
-
-        this.issuerIdentificationNumber = issuerIdentificationNumber;
-    }
-
-    public String getCountry() {
-
-        return country;
-    }
-
-    public void setCountry(String country) {
-
-        this.country = country;
-    }
-
-    public String getBankCardNumber() {
-
-        return bankCardNumber;
-    }
-
-    public void setBankCardNumber(String bankCardNumber) {
-
-        this.bankCardNumber = bankCardNumber;
-    }
-
     public String getBankCardNumberLength() {
 
         return bankCardNumberLength;
@@ -119,6 +99,16 @@ public class BankCardIssuer {
     public void setBankCardNumberLength(String bankCardNumberLength) {
 
         this.bankCardNumberLength = bankCardNumberLength;
+    }
+
+    public String getIssuerIdentificationNumber() {
+
+        return issuerIdentificationNumber;
+    }
+
+    public void setIssuerIdentificationNumber(String issuerIdentificationNumber) {
+
+        this.issuerIdentificationNumber = issuerIdentificationNumber;
     }
 
 }

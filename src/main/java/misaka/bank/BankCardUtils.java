@@ -5,11 +5,11 @@ import artoria.logging.LoggerFactory;
 import artoria.util.Assert;
 
 /**
- * Bank card issuer tools.
+ * Bank card tools.
  * @author Kahle
  */
-public class BankCardIssuerUtils {
-    private static Logger log = LoggerFactory.getLogger(BankCardIssuerUtils.class);
+public class BankCardUtils {
+    private static Logger log = LoggerFactory.getLogger(BankCardUtils.class);
     private static BankCardIssuerProvider bankCardIssuerProvider;
 
     public static BankCardIssuerProvider getBankCardIssuerProvider() {
@@ -19,13 +19,13 @@ public class BankCardIssuerUtils {
 
     public static void setBankCardIssuerProvider(BankCardIssuerProvider bankCardIssuerProvider) {
         Assert.notNull(bankCardIssuerProvider, "Parameter \"bankCardIssuerProvider\" must not null. ");
-        log.info("Set bank card issuer provider: {}", bankCardIssuerProvider.getClass().getName());
-        BankCardIssuerUtils.bankCardIssuerProvider = bankCardIssuerProvider;
+        log.info("Set bank card provider: {}", bankCardIssuerProvider.getClass().getName());
+        BankCardUtils.bankCardIssuerProvider = bankCardIssuerProvider;
     }
 
-    public static BankCardIssuer findBankCardIssuer(String bankCardNumber) {
+    public static BankCardIssuer issuerInfo(String bankCardNumber) {
 
-        return getBankCardIssuerProvider().findBankCardIssuer(bankCardNumber);
+        return getBankCardIssuerProvider().issuerInfo(bankCardNumber);
     }
 
 }

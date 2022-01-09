@@ -1,6 +1,6 @@
 package misaka.sms;
 
-import artoria.data.AbstractExtendedData;
+import artoria.data.AbstractExtraData;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Short messaging service send result.
  * @author Kahle
  */
-public class SmsSendResult extends AbstractExtendedData implements Serializable {
+public class SmsSendResult extends AbstractExtraData implements Serializable {
     /**
      * Error code.
      */

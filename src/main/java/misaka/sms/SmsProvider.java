@@ -36,4 +36,6 @@ public interface SmsProvider {
      */
     List<SmsQueryResult> findSelective(SmsQuery smsQuery);
 
+//    List<SmsQueryResult> querySelective(SmsQuery smsQuery);
+
 }
