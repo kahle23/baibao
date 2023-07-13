@@ -1,0 +1,115 @@
+package baibao.extension.jackyun;
+
+import artoria.action.handler.AbstractAutoOperateActionHandler;
+import artoria.data.Dict;
+import artoria.data.json.JsonUtils;
+import artoria.exception.ExceptionUtils;
+import artoria.net.http.HttpMethod;
+import artoria.net.http.HttpResponse;
+import artoria.net.http.HttpUtils;
+import artoria.net.http.support.SimpleRequest;
+import artoria.util.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.util.Map;
+import java.util.SortedMap;
+
+import static artoria.common.Constants.UTF_8;
+
+/**
+ * 抽象的吉客云相关处理器.
+ * @author Kahle
+ */
+public abstract class AbstractJackYunHandler extends AbstractAutoOperateActionHandler {
+    private static final Logger log = LoggerFactory.getLogger(AbstractJackYunOpenApiHandler.class);
+
+    public AbstractJackYunHandler(String actionName, Class<?> registeredClass) {
+
+        super(actionName, registeredClass);
+    }
+
+    public AbstractJackYunHandler(String actionName) {
+
+        super(actionName);
+    }
+
+    protected abstract Object getInvokeConfig(Object input, String operation, Class<?> clazz);
+
+    protected String sign(Object data) {
+        Assert.notNull(data, "Parameter \"data\" must not null. ");
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] textBytes = String.valueOf(data).getBytes(Charset.forName(UTF_8));
+            byte[] md5Bytes = md5.digest(textBytes);
+            StringBuilder hexValue = new StringBuilder();
+            for (byte md5Byte : md5Bytes) {
+                int val = (md5Byte) & 0xff;
+                if (val < 16) { hexValue.append("0"); }
+                hexValue.append(Integer.toHexString(val));
+            }
+            return hexValue.toString();
+        }
+        catch (Exception e) {
+            throw ExceptionUtils.wrap(e);
+        }
+    }
+
+    protected String createSign(String appSecret, SortedMap<String, String> sortedMap) {
+        // 构建待签名的字符串
+        StringBuilder signStrBuilder = new StringBuilder(appSecret);
+        for (Map.Entry<String, String> entry : sortedMap.entrySet()) {
+            signStrBuilder.append(entry.getKey()).append(entry.getValue());
+        }
+        signStrBuilder.append(appSecret);
+        // 生成签名
+        return sign(signStrBuilder.toString().toLowerCase());
+    }
+
+    protected String http(String info, HttpMethod method, String url, Map<?, ?> headers, Object data) {
+        Assert.isInstanceOf(Map.class, data, "Parameter \"data\" must is instance of map. ");
+        SimpleRequest request = new SimpleRequest(url, method);
+        request.addParameters((Map<?, ?>) data);
+        HttpResponse response = HttpUtils.execute(request);
+        return response.getBodyAsString();
+    }
+
+    protected Object invokeApi(Object input, String method, Class<?> clazz) {
+
+        throw new UnsupportedOperationException();
+    }
+
+    protected Object convertInput(Object input, String operation, Class<?> clazz) {
+        if (input instanceof String) {
+            return String.valueOf(input);
+        }
+        else {
+            return JsonUtils.toJsonString(input);
+        }
+    }
+
+    protected Object convertOutput(Object input, String operation, Class<?> clazz, String result) {
+        if (result == null) { return null; }
+        if (CharSequence.class.isAssignableFrom(clazz)) {
+            return result;
+        }
+        else if (Dict.class.isAssignableFrom(clazz)) {
+            return JsonUtils.parseObject(result, Dict.class);
+        }
+        else if (Map.class.isAssignableFrom(clazz)) {
+            return JsonUtils.parseObject(result, Map.class);
+        }
+        else {
+            return JsonUtils.parseObject(result, clazz);
+        }
+    }
+
+    @Override
+    public Object operate(Object input, String name, Class<?> clazz) {
+
+        return invokeApi(input, name, clazz);
+    }
+
+}
