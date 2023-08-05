@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.kahlkn</groupId>
+    <groupId>io.github.kahle23</groupId>
     <artifactId>baibao</artifactId>
-    <version>0.0.1.20190433-SNAPSHOT</version>
+    <version>1.0.0.20240405.beta</version>
     <packaging>jar</packaging>
     <name>baibao</name>
     <url>https://github.com/kahlkn/baibao</url>
@@ -27,15 +27,15 @@
     <developers>
         <developer>
             <name>Kahle Kernel</name>
-            <email>kahlkn@gmail.com</email>
-            <url>https://github.com/kahlkn</url>
+            <email>kahle23@163.com</email>
+            <url>https://github.com/kahle23</url>
         </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/kahlkn/baibao</url>
-        <connection>scm:git:https://github.com/kahlkn/baibao.git</connection>
-        <developerConnection>https://github.com/kahlkn</developerConnection>
+        <url>https://github.com/kahle23/baibao</url>
+        <connection>scm:git:https://github.com/kahle23/baibao.git</connection>
+        <developerConnection>https://github.com/kahle23</developerConnection>
     </scm>
 
     <distributionManagement>
@@ -54,31 +54,67 @@
 
     <dependencies>
 
+        <!-- ///// begin artoria //// -->
         <dependency>
-            <groupId>com.github.kahlkn</groupId>
+            <groupId>io.github.kahle23</groupId>
             <artifactId>artoria</artifactId>
             <version>1.0.0.2019102003-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <groupId>io.github.kahle23</groupId>
+            <artifactId>artoria-extend</artifactId>
+            <version>1.0.0.2019102003-SNAPSHOT</version>
+        </dependency>
+        <!-- ///// end artoria //// -->
+
+        <!-- ///// begin spring //// -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>2.0.9.RELEASE</version>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>2.0.9.RELEASE</version>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>2.0.9.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>2.0.9.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- ///// end spring //// -->
+
+        <!-- ///// begin encryption //// -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.60</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
+        <!-- ///// end encryption //// -->
 
+        <!-- ///// begin json //// -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.68</version>
-            <scope>test</scope>
+            <version>1.2.72</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- ///// end json //// -->
 
         <dependency>
             <groupId>com.huaweicloud</groupId>
@@ -140,7 +176,7 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
@@ -150,9 +186,13 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <!-- disable format checking -->
+                        <configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -248,6 +288,10 @@
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
+                                <!-- disable format checking -->
+                                <configuration>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>

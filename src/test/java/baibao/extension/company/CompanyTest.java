@@ -7,7 +7,7 @@ import org.junit.Test;
 
 @Ignore
 public class CompanyTest {
-    private static Logger log = LoggerFactory.getLogger(CompanyTest.class);
+    private static final Logger log = LoggerFactory.getLogger(CompanyTest.class);
 
     @Test
     public void test1() {
