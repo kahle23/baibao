@@ -1,6 +1,8 @@
 package baibao.extension.ip;
 
-public class IpQuery {
+import java.io.Serializable;
+
+public class IpQuery implements Serializable {
     private String ipAddress;
     private String language;
 

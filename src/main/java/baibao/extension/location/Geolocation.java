@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * @see <a href="https://en.wikipedia.org/wiki/Geolocation">Geolocation</a>
  * @author Kahle
  */
-public class Geolocation extends Location implements Serializable {
+public class Geolocation extends Location implements GeoCoordinate, Serializable {
     /**
      * The longitude.
      */
@@ -24,31 +24,37 @@ public class Geolocation extends Location implements Serializable {
      */
     private BigDecimal altitude;
 
+    @Override
     public BigDecimal getLongitude() {
 
         return longitude;
     }
 
+    @Override
     public void setLongitude(BigDecimal longitude) {
 
         this.longitude = longitude;
     }
 
+    @Override
     public BigDecimal getLatitude() {
 
         return latitude;
     }
 
+    @Override
     public void setLatitude(BigDecimal latitude) {
 
         this.latitude = latitude;
     }
 
+    @Override
     public BigDecimal getAltitude() {
 
         return altitude;
     }
 
+    @Override
     public void setAltitude(BigDecimal altitude) {
 
         this.altitude = altitude;

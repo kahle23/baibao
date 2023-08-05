@@ -1,6 +1,8 @@
 package baibao.extension.company;
 
-public class CompanyQuery {
+import java.io.Serializable;
+
+public class CompanyQuery implements Serializable {
     private String id;
     private String name;
     private String type;
