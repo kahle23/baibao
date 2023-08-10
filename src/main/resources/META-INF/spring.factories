@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+baibao.extension.bank.support.supfree.SupfreeNetAutoConfiguration
+
+
+
