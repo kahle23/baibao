@@ -1,5 +1,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-baibao.extension.bank.support.supfree.SupfreeNetAutoConfiguration
+baibao.extension.bank.support.supfree.SupfreeNetAutoConfiguration,\
+baibao.extension.ip.support.ipapi.IpApiAutoConfiguration
 
 
 
