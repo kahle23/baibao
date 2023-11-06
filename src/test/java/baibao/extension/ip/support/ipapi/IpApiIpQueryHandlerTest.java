@@ -12,19 +12,20 @@ import org.slf4j.LoggerFactory;
 
 @Ignore
 public class IpApiIpQueryHandlerTest {
-    private static Logger log = LoggerFactory.getLogger(IpApiIpQueryHandlerTest.class);
+    private static final Logger log = LoggerFactory.getLogger(IpApiIpQueryHandlerTest.class);
+    private static final String IP_QUERY_NAME = "ip-query-ipapi";
 
     @Test
     public void test1() {
         JsonUtils.registerHandler("default", new FastJsonHandler());
-        ActionUtils.registerHandler(IpQuery.class, new IpApiIpActionHandler());
+        ActionUtils.registerHandler(IP_QUERY_NAME, new IpApiIpActionHandler());
 
         IpQuery query = new IpQuery("223.98.40.191");
-        IpApiIpLocation ipLocation = ActionUtils.execute(query, IpApiIpLocation.class);
+        IpApiIpLocation ipLocation = ActionUtils.execute(query, IP_QUERY_NAME, IpApiIpLocation.class);
         log.info("{}", JSON.toJSONString(ipLocation, true));
 
         query = new IpQuery("106.57.23.1");
-        ipLocation = ActionUtils.execute(query, IpApiIpLocation.class);
+        ipLocation = ActionUtils.execute(query, IP_QUERY_NAME, IpApiIpLocation.class);
         log.info("{}", JSON.toJSONString(ipLocation, true));
 
         /*query = new IpQuery("120.231.22.221");

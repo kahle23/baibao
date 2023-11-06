@@ -1,7 +1,6 @@
 package baibao.extension.ip.support.ipapi;
 
 import artoria.action.ActionUtils;
-import baibao.extension.ip.IpQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -21,7 +20,6 @@ public class IpApiAutoConfiguration implements InitializingBean, DisposableBean 
         IpApiIpActionHandler handler = new IpApiIpActionHandler();
         String actionName = "ip-query-ipapi";
         ActionUtils.registerHandler(actionName, handler);
-        ActionUtils.registerHandler(IpQuery.class, handler);
     }
 
     @Override

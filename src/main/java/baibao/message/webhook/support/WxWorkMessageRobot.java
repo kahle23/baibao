@@ -1,14 +1,13 @@
 package baibao.message.webhook.support;
 
-import artoria.bot.MessageBot;
+import artoria.data.Dict;
+import artoria.data.json.JsonUtils;
 import artoria.exception.ExceptionUtils;
-import artoria.exchange.JsonUtils;
-import artoria.lang.Dict;
 import artoria.message.handler.AbstractClassicMessageHandler;
-import artoria.net.HttpMethod;
-import artoria.net.HttpRequest;
-import artoria.net.HttpResponse;
-import artoria.net.HttpUtils;
+import artoria.net.http.HttpMethod;
+import artoria.net.http.HttpResponse;
+import artoria.net.http.HttpUtils;
+import artoria.net.http.support.SimpleRequest;
 import artoria.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ import static artoria.common.Constants.UTF_8;
  * @author Kahle
  */
 @Deprecated
-public class WxWorkMessageRobot extends AbstractClassicMessageHandler implements MessageBot {
+public class WxWorkMessageRobot extends AbstractClassicMessageHandler {
     private static final Logger log = LoggerFactory.getLogger(WxWorkMessageRobot.class);
     private final String url;
 
@@ -29,20 +28,19 @@ public class WxWorkMessageRobot extends AbstractClassicMessageHandler implements
         this.url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key="+key;
     }
 
-    @Override
     public Object send(Object message) {
         try {
-            HttpRequest httpRequest = new HttpRequest();
-            httpRequest.setUrl(url);
-            httpRequest.setMethod(HttpMethod.POST);
-            httpRequest.setCharset(UTF_8);
-            httpRequest.addHeader("Content-Type", "application/json");
+            SimpleRequest request = new SimpleRequest();
+            request.setUrl(url);
+            request.setMethod(HttpMethod.POST);
+            request.setCharset(UTF_8);
+            request.addHeader("Content-Type", "application/json");
 
             Dict dict = Dict.of("msgtype", "text").set("text", Dict.of("content", message));
 
-            httpRequest.setBody(JsonUtils.toJsonString(dict));
-            log.info("WxWorkMessageRobot send \"{}\". ", JsonUtils.toJsonString(httpRequest));
-            HttpResponse httpResponse = HttpUtils.getHttpClient().execute(httpRequest);
+            request.setBody(JsonUtils.toJsonString(dict));
+            log.info("WxWorkMessageRobot send \"{}\". ", JsonUtils.toJsonString(request));
+            HttpResponse httpResponse = HttpUtils.execute(request);
             String bodyAsString = httpResponse.getBodyAsString();
             log.info("WxWorkMessageRobot receive \"{}\". ", bodyAsString);
             return bodyAsString;

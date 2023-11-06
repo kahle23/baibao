@@ -1,10 +1,10 @@
 package baibao.extension.bank.support.supfree;
 
 import artoria.action.handler.AbstractClassicActionHandler;
-import artoria.net.HttpMethod;
-import artoria.net.HttpRequest;
-import artoria.net.HttpResponse;
-import artoria.net.HttpUtils;
+import artoria.net.http.HttpMethod;
+import artoria.net.http.HttpResponse;
+import artoria.net.http.HttpUtils;
+import artoria.net.http.support.SimpleRequest;
 import artoria.util.CollectionUtils;
 import artoria.util.ObjectUtils;
 import artoria.util.StringUtils;
@@ -42,10 +42,10 @@ public class SupfreeBankCardActionHandler extends AbstractClassicActionHandler {
             isSupport(new Class[]{BankCard.class}, clazz);
             BankCardQuery bankCardIssuerQuery = (BankCardQuery) input;
             bankCardNumber = bankCardIssuerQuery.getBankCardNumber();
-            HttpRequest request = new HttpRequest();
+            SimpleRequest request = new SimpleRequest();
             request.setMethod(HttpMethod.GET);
             request.setUrl("https://bankcard.supfree.net/tongku.asp?cardno=" + bankCardNumber);
-            HttpResponse response = HttpUtils.getHttpClient().execute(request);
+            HttpResponse response = HttpUtils.execute(request);
             String html = response.getBodyAsString("GB2312");
             Document document = Jsoup.parse(html);
 

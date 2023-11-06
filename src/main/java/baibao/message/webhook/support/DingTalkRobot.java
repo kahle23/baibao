@@ -1,12 +1,16 @@
 package baibao.message.webhook.support;
 
-import artoria.bot.MessageBot;
 import artoria.codec.CodecUtils;
 import artoria.crypto.Hmac;
 import artoria.crypto.KeyUtils;
+import artoria.data.json.JsonUtils;
 import artoria.exception.ExceptionUtils;
-import artoria.exchange.JsonUtils;
-import artoria.net.*;
+import artoria.message.handler.AbstractClassicMessageHandler;
+import artoria.net.http.HttpClient;
+import artoria.net.http.HttpMethod;
+import artoria.net.http.HttpResponse;
+import artoria.net.http.HttpUtils;
+import artoria.net.http.support.SimpleRequest;
 import artoria.util.Assert;
 import artoria.util.CollectionUtils;
 import artoria.util.StringUtils;
@@ -26,7 +30,7 @@ import static artoria.common.Constants.*;
  * @author Kahle
  */
 @Deprecated
-public class DingTalkRobot implements MessageBot {
+public class DingTalkRobot extends AbstractClassicMessageHandler {
     private static final Logger log = LoggerFactory.getLogger(DingTalkRobot.class);
     private final HttpClient httpClient;
     private final String webHook;
@@ -34,7 +38,7 @@ public class DingTalkRobot implements MessageBot {
 
     public DingTalkRobot(String webHook, String secret) {
 
-        this(HttpUtils.getHttpClient(), webHook, secret);
+        this(HttpUtils.getHttpClient(HttpUtils.getDefaultClientName()), webHook, secret);
     }
 
     public DingTalkRobot(HttpClient httpClient, String webHook, String secret) {
@@ -95,41 +99,55 @@ public class DingTalkRobot implements MessageBot {
         return send(JsonUtils.toJsonString(data));
     }
 
-    @Override
     public Object send(Object message) {
         try {
             Long timestamp = System.currentTimeMillis();
             String sign = sign(timestamp, secret);
             String fullUrl = webHook;
             fullUrl += "&timestamp=" + timestamp + "&sign=" + sign;
-            HttpRequest httpRequest = new HttpRequest();
-            httpRequest.setUrl(fullUrl);
-            httpRequest.setMethod(HttpMethod.POST);
-            httpRequest.setCharset(UTF_8);
-            httpRequest.addHeader("Content-Type", "application/json");
+            SimpleRequest request = new SimpleRequest();
+            request.setUrl(fullUrl);
+            request.setMethod(HttpMethod.POST);
+            request.setCharset(UTF_8);
+            request.addHeader("Content-Type", "application/json");
             if (message instanceof String) {
                 String str = String.valueOf(message);
                 boolean normal = StringUtils.isNotBlank(str)
                         && str.startsWith("{") && str.endsWith("}");
                 if (normal) {
                     log.info("DingTalk robot send \"{}\". ", message);
-                    httpRequest.setBody(message);
+                    request.setBody(message);
                 }
                 else {
                     return sendText(str, false, null);
                 }
             }
             else {
-                log.info("DingTalk robot send \"{}\". ", JsonUtils.toJsonString(httpRequest));
-                httpRequest.setBody(JsonUtils.toJsonString(message));
+                log.info("DingTalk robot send \"{}\". ", JsonUtils.toJsonString(request));
+                request.setBody(JsonUtils.toJsonString(message));
             }
-            HttpResponse httpResponse = httpClient.execute(httpRequest);
+            HttpResponse httpResponse = httpClient.execute(request);
             String bodyAsString = httpResponse.getBodyAsString();
             log.info("DingTalk robot receive \"{}\". ", bodyAsString);
             return bodyAsString;
         }
         catch (Exception e) {
             throw ExceptionUtils.wrap(e);
+        }
+    }
+
+    @Override
+    public Object operate(Object input, String name, Class<?> clazz) {
+        Assert.notNull(input, "Parameter \"input\" must not null. ");
+        Assert.notNull(clazz, "Parameter \"clazz\" must not null. ");
+        if ("send".equals(name)) {
+            isSupport(new Class[]{ String.class }, clazz);
+            return send(input);
+        }
+        else {
+            throw new UnsupportedOperationException(
+                    "Unsupported operation name \"" + name + "\"! "
+            );
         }
     }
 
