@@ -5,7 +5,6 @@ import artoria.crypto.EncryptUtils;
 import artoria.file.Csv;
 import artoria.io.IOUtils;
 import artoria.util.ClassLoaderUtils;
-import baibao.extension.device.DeviceQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -34,7 +33,7 @@ public class DeviceAutoConfiguration implements InitializingBean, DisposableBean
         Csv csv = new Csv();
         csv.setCharset(DEFAULT_ENCODING_NAME);
         csv.readFromByteArray(decrypt);
-        ActionUtils.registerHandler(DeviceQuery.class, new FileBasedDeviceActionHandler(csv));
+        ActionUtils.registerHandler("device-query", new FileBasedDeviceActionHandler(csv));
     }
 
     @Override

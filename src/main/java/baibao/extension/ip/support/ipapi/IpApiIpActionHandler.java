@@ -3,7 +3,9 @@ package baibao.extension.ip.support.ipapi;
 import artoria.action.handler.AbstractClassicActionHandler;
 import artoria.data.bean.BeanUtils;
 import artoria.data.json.JsonUtils;
-import artoria.net.HttpUtils;
+import artoria.net.http.HttpMethod;
+import artoria.net.http.HttpUtils;
+import artoria.net.http.support.SimpleRequest;
 import artoria.util.MapUtils;
 import artoria.util.StringUtils;
 import artoria.util.TypeUtils;
@@ -32,7 +34,9 @@ public class IpApiIpActionHandler extends AbstractClassicActionHandler {
         String ipAddress = ipQuery.getIpAddress();
         String language = ipQuery.getLanguage();
         if (StringUtils.isBlank(language)) { language = "zh-CN"; }
-        String jsonString = HttpUtils.get("http://ip-api.com/json/" + ipAddress + "?lang=" + language);
+        SimpleRequest request = new SimpleRequest(
+                "http://ip-api.com/json/" + ipAddress + "?lang=" + language, HttpMethod.GET);
+        String jsonString = HttpUtils.execute(request).getBodyAsString();
         if (StringUtils.isBlank(jsonString)) { return null; }
         ParameterizedType parameterizedType = TypeUtils.parameterizedOf(Map.class, String.class, String.class);
         Map<String, String> map = JsonUtils.parseObject(jsonString, parameterizedType);
