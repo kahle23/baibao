@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.kahlkn</groupId>
+    <groupId>io.github.kahle23</groupId>
     <artifactId>baibao</artifactId>
-    <version>0.0.1.20190433-SNAPSHOT</version>
+    <version>1.0.0.20210917f.beta</version>
     <packaging>jar</packaging>
     <name>baibao</name>
     <url>https://github.com/kahlkn/baibao</url>
@@ -27,15 +27,15 @@
     <developers>
         <developer>
             <name>Kahle Kernel</name>
-            <email>kahlkn@gmail.com</email>
-            <url>https://github.com/kahlkn</url>
+            <email>kahle23@163.com</email>
+            <url>https://github.com/kahle23</url>
         </developer>
     </developers>
 
     <scm>
-        <url>https://github.com/kahlkn/baibao</url>
-        <connection>scm:git:https://github.com/kahlkn/baibao.git</connection>
-        <developerConnection>https://github.com/kahlkn</developerConnection>
+        <url>https://github.com/kahle23/baibao</url>
+        <connection>scm:git:https://github.com/kahle23/baibao.git</connection>
+        <developerConnection>https://github.com/kahle23</developerConnection>
     </scm>
 
     <distributionManagement>
@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.github.kahlkn</groupId>
             <artifactId>artoria</artifactId>
-            <version>1.0.0.2019102003-SNAPSHOT</version>
+            <version>1.0.0.20210917f.beta</version>
         </dependency>
 
         <dependency>
@@ -126,7 +126,7 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
@@ -136,9 +136,12 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <!--<configuration>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>-->
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
