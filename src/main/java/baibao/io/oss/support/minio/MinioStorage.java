@@ -1,4 +1,4 @@
-package baibao.io.oss.support.minio.minio;
+package baibao.io.oss.support.minio;
 
 import artoria.exception.ExceptionUtils;
 import artoria.io.oss.OssBase;

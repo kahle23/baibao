@@ -1,8 +1,9 @@
-package baibao.db.vector.support;
+package baibao.db.vector.support.pinecone;
 
 import artoria.data.Dict;
 import artoria.data.bean.BeanUtils;
 import artoria.data.json.JsonUtils;
+import artoria.db.AbstractDbHandler;
 import artoria.db.vector.VectorDbHandler;
 import artoria.net.http.HttpMethod;
 import cn.hutool.core.util.StrUtil;
@@ -18,12 +19,20 @@ import java.net.Proxy;
 import static artoria.common.constant.Numbers.*;
 
 /**
+ * The base pinecone vector database handler.
+ * <a href="https://www.pinecone.io/">Pinecone</a>
  * <a href="https://docs.pinecone.io/reference">Pinecone API Reference</a>
+ * @author Kahle
  */
-public abstract class BasePineconeVectorDbHandler implements VectorDbHandler {
+public abstract class BasePineconeVectorDbHandler extends AbstractDbHandler implements VectorDbHandler {
     private static final Logger log = LoggerFactory.getLogger(BasePineconeVectorDbHandler.class);
 
-    protected abstract Config getConfig(Object argument);
+    /**
+     * Get the database configuration according to the arguments.
+     * @param arguments The input arguments
+     * @return The database configuration
+     */
+    protected abstract Config getConfig(Object arguments);
 
     protected Object doHttp(HttpMethod method, String url, Object input, Config config) {
         Boolean debug = config.getDebug();
@@ -126,6 +135,10 @@ public abstract class BasePineconeVectorDbHandler implements VectorDbHandler {
         return doHttp(HttpMethod.POST, url, data, config);
     }
 
+    /**
+     * The pinecone database configuration.
+     * @author Kahle
+     */
     public static class Config {
         private String host;
         private String apiKey;

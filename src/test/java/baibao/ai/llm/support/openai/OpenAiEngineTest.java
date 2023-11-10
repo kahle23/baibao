@@ -4,14 +4,18 @@ import artoria.ai.AiUtils;
 import artoria.data.Dict;
 import artoria.data.json.JsonUtils;
 import artoria.data.json.support.FastJsonHandler;
+import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson.JSON;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.Arrays;
 
 @Ignore
 public class OpenAiEngineTest {
@@ -20,25 +24,93 @@ public class OpenAiEngineTest {
 
     static {
         JsonUtils.registerHandler("default", new FastJsonHandler());
-        OpenAiEngine aiEngine = new OpenAiEngine("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");
-        aiEngine.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 58591)));
-        AiUtils.registerEngine(engineName, aiEngine);
+        String apiKey = "apiKey";
+        Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 58591));
+        AiUtils.registerEngine(engineName, new OpenAiEngineImpl(apiKey, proxy));
     }
 
     @Test
-    public void test1() {
-        String strategy = "models";
-        Dict execute = AiUtils.execute(engineName, (Object) null, strategy, Dict.class);
-        log.info(JSON.toJSONString(execute, true));
+    public void testSpeechCreate() {
+        // TTS models: tts-1 or tts-1-hd
+        Dict args = Dict.of("model", "tts-1")
+                // alloy, echo, fable, onyx, nova, shimmer
+                .set("voice", "alloy")
+                // mp3, opus, aac, flac
+//                .set("response_format", "mp3")
+                // 0.25 - 4.0    Defaults to 1.0
+//                .set("speed", 1.0)
+                .set("input", "This is test speech create! ")
+                ;
+        String method = "speechCreate";
+        InputStream execute = AiUtils.execute(engineName, args, method, InputStream.class);
+        File file = FileUtil.writeFromStream(execute, "F:\\test\\testSpeechCreate.mp3");
+        log.info("result: {}", file);
     }
 
     @Test
-    public void test2() {
-        String strategy = "completion";
-        String execute = AiUtils.execute(engineName, "what is ai?", strategy, String.class);
-        log.info(execute);
-//        Dict execute = AiUtils.execute("what is ai?", engineName, strategy, Dict.class);
-//        log.info(JSON.toJSONString(execute, Boolean.TRUE));
+    public void testChat() {
+        Dict args = Dict.of("model", "gpt-3.5-turbo-0613")
+                .set("temperature", 1.9)
+                .set("stream", true)
+                .set("messages", Arrays.asList(
+                        Dict.of("role", "system").set("content", "You are a helpful assistant."),
+                        Dict.of("role", "user").set("content", "what is AI?"))
+                )
+        ;
+        String method = "chat";
+        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
+    }
+
+    @Test
+    public void testCompletion() {
+        Dict args = Dict.of("model", "gpt-3.5-turbo-instruct")
+                .set("max_tokens", 7)
+                .set("temperature", 0)
+//                .set("stream", true)
+                .set("prompt", "Say this is a test")
+                ;
+        String method = "completion";
+        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
+    }
+
+    @Test
+    public void testEmbedding() {
+        Dict args = Dict.of("model", "text-embedding-ada-002")
+                .set("encoding_format", "float")
+                .set("input", "this is a test")
+                ;
+        String method = "embedding";
+        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
+    }
+
+    @Test
+    public void testImageCreate() {
+        Dict args = Dict.of("model", "dall-e-3")
+                .set("n", 1)
+                // Defaults to standard
+//                .set("quality", "hd")
+                // url or b64_json
+//                .set("response_format", "url")
+                // 256x256, 512x512, or 1024x1024 for dall-e-2.
+                // 1024x1024, 1792x1024, or 1024x1792 for dall-e-3
+                .set("size", "1024x1024")
+                // vivid or natural, Defaults to vivid
+//                .set("style", "vivid")
+                .set("prompt", "A cute baby sea otter. ")
+                ;
+        String method = "imageCreate";
+        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
+    }
+
+    @Test
+    public void testModels() {
+        String method = "models";
+        Dict execute = AiUtils.execute(engineName, (Object) null, method, Dict.class);
+        log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
     @Test

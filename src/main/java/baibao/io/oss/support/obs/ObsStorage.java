@@ -1,4 +1,4 @@
-package baibao.io.oss.support.minio.obs;
+package baibao.io.oss.support.obs;
 
 import artoria.data.bean.BeanUtils;
 import artoria.exception.ExceptionUtils;

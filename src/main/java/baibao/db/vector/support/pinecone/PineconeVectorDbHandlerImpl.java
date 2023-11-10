@@ -1,4 +1,4 @@
-package baibao.db.vector.support;
+package baibao.db.vector.support.pinecone;
 
 import java.net.Proxy;
 

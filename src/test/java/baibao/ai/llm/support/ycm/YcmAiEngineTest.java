@@ -2,6 +2,9 @@ package baibao.ai.llm.support.ycm;
 
 import artoria.ai.AiUtils;
 import artoria.data.Dict;
+import artoria.data.json.JsonUtils;
+import artoria.data.json.support.FastJsonHandler;
+import com.alibaba.fastjson.JSON;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -13,22 +16,17 @@ public class YcmAiEngineTest {
     private static final String engineName = "ycm";
 
     static {
-        YcmAiEngine aiEngine = new YcmAiEngine(
-                "rlh8p35t87vqyw95sl4wnew3trh8ay92", "0zkx8r0dcgivf7tdwfv2tmm46b353zop");
-        AiUtils.registerEngine(engineName, aiEngine);
+        JsonUtils.registerHandler("default", new FastJsonHandler());
+        String accessKey = "accessKey";
+        String secretKey = "secretKey";
+        AiUtils.registerEngine(engineName, new YcmAiEngineImpl(accessKey, secretKey));
     }
 
     @Test
-    public void test1() {
-        String execute = AiUtils.execute(engineName, "what is AI?", String.class);
-        log.info(execute);
-    }
-
-    @Test
-    public void test2() {
-        Dict message = Dict.of("modelId", "1651468516836098050").set("message", "hello, world!");
-        String execute = AiUtils.execute(engineName, message, String.class);
-        log.info(execute);
+    public void testChat() {
+        Dict args = Dict.of("message", "what is AI?");
+        Dict execute = AiUtils.execute(engineName, args, "chat", Dict.class);
+        log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
 }
