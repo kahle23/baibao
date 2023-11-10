@@ -1,4 +1,4 @@
-package baibao.extension.location;
+package baibao.location;
 
 import artoria.data.geo.GeoCoordinate;
 
@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * @see <a href="https://en.wikipedia.org/wiki/Geolocation">Geolocation</a>
  * @author Kahle
  */
+@Deprecated // TODO: 2023/3/27 Deletable
 public class Geolocation extends Location implements GeoCoordinate, Serializable {
     /**
      * The longitude.
