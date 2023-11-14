@@ -10,22 +10,22 @@ import java.net.Proxy;
  * @see <a href="https://platform.openai.com/docs/api-reference">API REFERENCE</a>
  * @author Kahle
  */
-public class OpenAiEngineImpl extends BaseOpenAiEngine {
-    private static final Logger log = LoggerFactory.getLogger(OpenAiEngineImpl.class);
+public class OpenAiHandlerImpl extends BaseOpenAiHandler {
+    private static final Logger log = LoggerFactory.getLogger(OpenAiHandlerImpl.class);
     private final Config config;
 
-    public OpenAiEngineImpl(String apiKey, Proxy proxy) {
+    public OpenAiHandlerImpl(String apiKey, Proxy proxy) {
 
         this.config = new Config(apiKey, proxy);
     }
 
-    public OpenAiEngineImpl(String apiKey) {
+    public OpenAiHandlerImpl(String apiKey) {
 
         this.config = new Config(apiKey);
     }
 
     @Override
-    protected Config getConfig(Object arguments) {
+    protected Config getConfig(Object input) {
 
         return config;
     }

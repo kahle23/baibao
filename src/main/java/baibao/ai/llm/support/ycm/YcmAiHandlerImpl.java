@@ -8,22 +8,22 @@ import org.slf4j.LoggerFactory;
  * @see <a href="https://platform.openai.com/docs/api-reference">API REFERENCE</a>
  * @author Kahle
  */
-public class YcmAiEngineImpl extends BaseYcmAiEngine {
-    private static final Logger log = LoggerFactory.getLogger(YcmAiEngineImpl.class);
+public class YcmAiHandlerImpl extends AbstractYcmAiHandler {
+    private static final Logger log = LoggerFactory.getLogger(YcmAiHandlerImpl.class);
     private final Config config;
 
-    public YcmAiEngineImpl(String accessKey, String secretKey, Long modelId) {
+    public YcmAiHandlerImpl(String accessKey, String secretKey, Long modelId) {
 
         this.config = new Config(accessKey, secretKey, modelId);
     }
 
-    public YcmAiEngineImpl(String accessKey, String secretKey) {
+    public YcmAiHandlerImpl(String accessKey, String secretKey) {
 
         this.config = new Config(accessKey, secretKey);
     }
 
     @Override
-    protected Config getConfig(Object arguments) {
+    protected Config getConfig(Object input) {
 
         return config;
     }

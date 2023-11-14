@@ -6,6 +6,7 @@ import artoria.data.json.support.FastJsonHandler;
 import artoria.generator.id.IdUtils;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Ignore
 public class PineconeVectorDbHandlerTest {
     private static final Logger log = LoggerFactory.getLogger(PineconeVectorDbHandlerTest.class);
     private static final BasePineconeVectorDbHandler vectorStorage = new PineconeVectorDbHandlerImpl(
-            "https://test-index-6f011fc.svc.us-west4-gcp-free.pinecone.io",
-            "bd14e207-43e5-4453-9bfd-61a250372b17",
+            "host",
+            "apiKey",
             new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 51837)));
 
     static {
@@ -45,7 +47,8 @@ public class PineconeVectorDbHandlerTest {
                 .set("key1", "val1");
         input.set("metadata", metadata);
         // upsert
-        Object result = vectorStorage.upsert(Dict.of("vectors", Collections.singletonList(input)));
+        Dict inputData = Dict.of("vectors", Collections.singletonList(input));
+        Object result = vectorStorage.docUpsert(inputData, Dict.class);
         log.info("upsert result: {}", JSON.toJSONString(result, true));
     }
 
@@ -68,7 +71,7 @@ public class PineconeVectorDbHandlerTest {
             vector.add(Double.valueOf(RandomUtil.randomDouble()).floatValue());
         }
         query.set("vector", vector);
-        Object result = vectorStorage.query(query);
+        Object result = vectorStorage.docQuery(query, Dict.class);
         log.info("query result: {}", JSON.toJSONString(result, true));
     }
 
@@ -78,7 +81,7 @@ public class PineconeVectorDbHandlerTest {
         // ids 向量ID列表
         Dict query = Dict.of();
         query.set("ids", Collections.singletonList("2487333abb0a44f086d7c7d993c25a0b"));
-        Object result = vectorStorage.fetch(query);
+        Object result = vectorStorage.docFetch(query, Dict.class);
         log.info("fetch result: {}", JSON.toJSONString(result, true));
     }
 
@@ -99,7 +102,7 @@ public class PineconeVectorDbHandlerTest {
                 .set("key1", "val1");
         input.set("setMetadata", metadata);
         // update
-        Object result = vectorStorage.update(input);
+        Object result = vectorStorage.docUpdate(input, Dict.class);
         log.info("update result: {}", JSON.toJSONString(result, true));
     }
 
@@ -111,7 +114,7 @@ public class PineconeVectorDbHandlerTest {
         // namespace 命名空间
         Dict input = Dict.of();
         input.set("ids", Collections.singletonList("2487333abb0a44f086d7c7d993c25a0b"));
-        Object result = vectorStorage.delete(input);
+        Object result = vectorStorage.docDelete(input, Dict.class);
         log.info("delete result: {}", JSON.toJSONString(result, true));
     }
 
@@ -125,7 +128,7 @@ public class PineconeVectorDbHandlerTest {
         // vector 向量数据列表
         // sparseValues 向量稀疏数据。表示为索引列表和对应值列表，它们必须具有相同的长度。
         // id 向量ID
-        Object result = vectorStorage.describeIndexStats(Dict.of());
+        Object result = vectorStorage.describeIndexStats(Dict.of(), Dict.class);
         log.info("describeIndexStats result: {}", JSON.toJSONString(result, true));
     }
 

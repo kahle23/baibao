@@ -1,0 +1,51 @@
+package baibao.db.vector.dto;
+
+import java.util.List;
+import java.util.Map;
+
+public class DocBasicData {
+    private Map<Object, Object> data;
+    private List<Object> vector;
+    private String id;
+
+    public DocBasicData(String id, List<Object> vector, Map<Object, Object> data) {
+        this.vector = vector;
+        this.data = data;
+        this.id = id;
+    }
+
+    public DocBasicData() {
+
+    }
+
+    public String getId() {
+
+        return id;
+    }
+
+    public void setId(String id) {
+
+        this.id = id;
+    }
+
+    public List<Object> getVector() {
+
+        return vector;
+    }
+
+    public void setVector(List<Object> vector) {
+
+        this.vector = vector;
+    }
+
+    public Map<Object, Object> getData() {
+
+        return data;
+    }
+
+    public void setData(Map<Object, Object> data) {
+
+        this.data = data;
+    }
+
+}

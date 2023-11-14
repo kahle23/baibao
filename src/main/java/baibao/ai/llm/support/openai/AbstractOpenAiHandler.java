@@ -1,7 +1,6 @@
 package baibao.ai.llm.support.openai;
 
-import artoria.ai.AbstractClassicAiEngine;
-import artoria.ai.llm.LLM;
+import artoria.ai.support.AbstractClassicAiHandler;
 import artoria.data.Dict;
 import artoria.data.bean.BeanUtils;
 import artoria.data.json.JsonUtils;
@@ -29,8 +28,8 @@ import static artoria.net.http.HttpMethod.POST;
  * @see <a href="https://platform.openai.com/docs/api-reference">API REFERENCE</a>
  * @author Kahle
  */
-public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implements LLM {
-    private static final Logger log = LoggerFactory.getLogger(BaseOpenAiEngine.class);
+public abstract class AbstractOpenAiHandler extends AbstractClassicAiHandler {
+    private static final Logger log = LoggerFactory.getLogger(AbstractOpenAiHandler.class);
     protected static final String STREAM_KEY = "stream";
     protected static final String PROMPT_KEY = "prompt";
     protected static final String ERROR_KEY  = "error";
@@ -38,10 +37,10 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
 
     /**
      * Get the open ai engine configuration according to the arguments.
-     * @param arguments The input arguments
+     * @param input The input arguments
      * @return The open ai engine configuration
      */
-    protected abstract Config getConfig(Object arguments);
+    protected abstract Config getConfig(Object input);
 
     protected void checkResult(Map<?, ?> map) {
         Dict result = map instanceof Dict ? (Dict) map : Dict.of(map);
@@ -129,20 +128,20 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
 
     @Override
     public Object execute(Object input, String strategy, Class<?> clazz) {
-        if ("speechCreate".equals(strategy)) { return speechCreate(input); }
-        else if ("transcriptionCreate".equals(strategy)) { return transcriptionCreate(input); }
-        else if ("translationCreate".equals(strategy)) { return translationCreate(input); }
-        else if ("chat".equals(strategy)) { return chat(input); }
-        else if ("completion".equals(strategy)) { return completion(input); }
-        else if ("embedding".equals(strategy)) { return embedding(input); }
-        else if ("imageCreate".equals(strategy)) { return imageCreate(input); }
-        else if ("imageEdit".equals(strategy)) { return imageEdit(input); }
-        else if ("imageVariation".equals(strategy)) { return imageVariation(input); }
-        else if ("models".equals(strategy)) { return models(input); }
+        if ("speechCreate".equals(strategy)) { return speechCreate(input, clazz); }
+        else if ("transcriptionCreate".equals(strategy)) { return transcriptionCreate(input, clazz); }
+        else if ("translationCreate".equals(strategy)) { return translationCreate(input, clazz); }
+        else if ("chat".equals(strategy)) { return chat(input, clazz); }
+        else if ("completion".equals(strategy)) { return completion(input, clazz); }
+        else if ("embedding".equals(strategy)) { return embedding(input, clazz); }
+        else if ("imageCreate".equals(strategy)) { return imageCreate(input, clazz); }
+        else if ("imageEdit".equals(strategy)) { return imageEdit(input, clazz); }
+        else if ("imageVariation".equals(strategy)) { return imageVariation(input, clazz); }
+        else if ("modelList".equals(strategy)) { return modelList(input, clazz); }
         else {
             throw new UnsupportedOperationException(
                 "The method is unsupported. \n\n" +
-                "The openai ai engine. \n" +
+                "The openai ai handler. \n" +
                 "(The arguments see api documents \"https://platform.openai.com/docs/api-reference\")\n" +
                 "Supported method:\n" +
                 " - speechCreate\n" +
@@ -154,7 +153,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
                 " - imageCreate\n" +
                 " - imageEdit\n" +
                 " - imageVariation\n" +
-                " - models\n"
+                " - modelList\n"
             );
         }
     }
@@ -166,7 +165,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/audio/createSpeech">
      *     Create speech</a>
      */
-    public Object speechCreate(Object input) {
+    public Object speechCreate(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/audio/speech";
@@ -180,7 +179,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/audio/createTranscription">
      *     Create transcription</a>
      */
-    public Object transcriptionCreate(Object input) {
+    public Object transcriptionCreate(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/audio/transcriptions";
@@ -194,7 +193,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/audio/createTranslation">
      *     Create translation</a>
      */
-    public Object translationCreate(Object input) {
+    public Object translationCreate(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/audio/translations";
@@ -208,7 +207,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/chat/create">
      *     Create chat completion</a>
      */
-    public Object chat(Object input) {
+    public Object chat(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/chat/completions";
@@ -224,7 +223,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/completions/create">
      *     Create completion</a>
      */
-    public Object completion(Object input) {
+    public Object completion(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/completions";
@@ -239,7 +238,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/embeddings/create">
      *     Create embeddings</a>
      */
-    public Object embedding(Object input) {
+    public Object embedding(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/embeddings";
@@ -253,7 +252,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/images/create">
      *     Create image</a>
      */
-    public Object imageCreate(Object input) {
+    public Object imageCreate(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/images/generations";
@@ -267,7 +266,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/images/createEdit">
      *     Create image edit</a>
      */
-    public Object imageEdit(Object input) {
+    public Object imageEdit(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/images/edits";
@@ -281,7 +280,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/images/createVariation">
      *     Create image variation</a>
      */
-    public Object imageVariation(Object input) {
+    public Object imageVariation(Object input, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/images/variations";
@@ -296,7 +295,7 @@ public abstract class BaseOpenAiEngine extends AbstractClassicAiEngine implement
      * @see <a href="https://platform.openai.com/docs/api-reference/models/list">
      *     List models</a>
      */
-    public Object models(Object input) {
+    public Object modelList(Object input, Class<?> clazz) {
         Config config = getConfig(input);
         String url = "https://api.openai.com/v1/models";
         return doHttp(GET, ONE, url, input, config);

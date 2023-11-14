@@ -16,7 +16,7 @@ public class PineconeVectorDbHandlerImpl extends BasePineconeVectorDbHandler {
     }
 
     @Override
-    protected Config getConfig(Object argument) {
+    protected Config getConfig(Object input) {
 
         return config;
     }

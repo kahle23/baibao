@@ -1,7 +1,6 @@
 package baibao.ai.llm.support.ycm;
 
-import artoria.ai.AbstractClassicAiEngine;
-import artoria.ai.llm.LLM;
+import artoria.ai.support.AbstractClassicAiHandler;
 import artoria.common.constant.Symbols;
 import artoria.data.Dict;
 import artoria.data.bean.BeanUtils;
@@ -31,8 +30,8 @@ import static java.lang.Boolean.FALSE;
  * @see <a href="https://github.com/liyupi/yucongming-java-sdk">鱼聪明 Java SDK</>
  * @author Kahle
  */
-public abstract class BaseYcmAiEngine extends AbstractClassicAiEngine implements LLM {
-    private static final Logger log = LoggerFactory.getLogger(BaseYcmAiEngine.class);
+public abstract class AbstractYcmAiHandler extends AbstractClassicAiHandler {
+    private static final Logger log = LoggerFactory.getLogger(AbstractYcmAiHandler.class);
     protected static final String API_URI = "https://www.yucongming.com/api/dev";
     protected static final String MODEL_ID_KEY = "modelId";
     protected static final String MESSAGE_KEY = "message";
@@ -40,10 +39,10 @@ public abstract class BaseYcmAiEngine extends AbstractClassicAiEngine implements
 
     /**
      * Get the ycm ai engine configuration according to the arguments.
-     * @param arguments The input arguments
+     * @param input The input arguments
      * @return The ycm ai engine configuration
      */
-    protected abstract Config getConfig(Object arguments);
+    protected abstract Config getConfig(Object input);
 
     protected String buildSign(Config config, String body) {
         Digester md5 = new Digester(DigestAlgorithm.SHA256);
@@ -96,29 +95,31 @@ public abstract class BaseYcmAiEngine extends AbstractClassicAiEngine implements
 
     @Override
     public Object execute(Object input, String strategy, Class<?> clazz) {
-        if ("chat".equals(strategy)) {
-            Assert.notNull(input, "Parameter \"input\" must not null. ");
-            Assert.notNull(clazz, "Parameter \"clazz\" must not null. ");
-            Assert.isSupport(clazz, FALSE, Dict.class);
-            Dict   inputData = Dict.of(BeanUtils.beanToMap(input));
-            Config config = getConfig(inputData);
-            String url = API_URI + "/chat";
-            if (inputData.get(MODEL_ID_KEY) == null) {
-                Long modelId = config.getModelId();
-                inputData.set(MODEL_ID_KEY, modelId != null ? modelId : DEFAULT_MODEL_ID);
-            }
-            return doHttp(HttpMethod.POST, url, inputData, config);
-        }
+        if ("chat".equals(strategy)) { return chat(input, clazz); }
         else {
             throw new UnsupportedOperationException(
                 "The method is unsupported. \n\n" +
-                "The yucongming ai engine. \n" +
+                "The yucongming ai handler. \n" +
                 "\n" +
                 "Supported method:\n" +
                 " - chat\n" +
                 "     args: {message:str, modelId:long}"
             );
         }
+    }
+
+    public Object chat(Object input, Class<?> clazz) {
+        Assert.notNull(input, "Parameter \"input\" must not null. ");
+        Assert.notNull(clazz, "Parameter \"clazz\" must not null. ");
+        Assert.isSupport(clazz, FALSE, Dict.class);
+        Dict   inputData = Dict.of(BeanUtils.beanToMap(input));
+        Config config = getConfig(inputData);
+        String url = API_URI + "/chat";
+        if (inputData.get(MODEL_ID_KEY) == null) {
+            Long modelId = config.getModelId();
+            inputData.set(MODEL_ID_KEY, modelId != null ? modelId : DEFAULT_MODEL_ID);
+        }
+        return doHttp(HttpMethod.POST, url, inputData, config);
     }
 
     public static class Config {

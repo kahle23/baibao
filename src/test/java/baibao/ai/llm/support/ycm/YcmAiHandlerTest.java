@@ -11,21 +11,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Ignore
-public class YcmAiEngineTest {
-    private static final Logger log = LoggerFactory.getLogger(YcmAiEngineTest.class);
-    private static final String engineName = "ycm";
+public class YcmAiHandlerTest {
+    private static final Logger log = LoggerFactory.getLogger(YcmAiHandlerTest.class);
+    private static final String handlerName = "ycm";
 
     static {
         JsonUtils.registerHandler("default", new FastJsonHandler());
         String accessKey = "accessKey";
         String secretKey = "secretKey";
-        AiUtils.registerEngine(engineName, new YcmAiEngineImpl(accessKey, secretKey));
+        AiUtils.registerHandler(handlerName, new YcmAiHandlerImpl(accessKey, secretKey));
     }
 
     @Test
     public void testChat() {
         Dict args = Dict.of("message", "what is AI?");
-        Dict execute = AiUtils.execute(engineName, args, "chat", Dict.class);
+        Dict execute = AiUtils.execute(handlerName, args, "chat", Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 

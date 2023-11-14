@@ -18,15 +18,15 @@ import java.net.Proxy;
 import java.util.Arrays;
 
 @Ignore
-public class OpenAiEngineTest {
-    private static final Logger log = LoggerFactory.getLogger(OpenAiEngineTest.class);
-    private static final String engineName = "openai";
+public class OpenAiHandlerTest {
+    private static final Logger log = LoggerFactory.getLogger(OpenAiHandlerTest.class);
+    private static final String handlerName = "openai";
 
     static {
         JsonUtils.registerHandler("default", new FastJsonHandler());
         String apiKey = "apiKey";
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 58591));
-        AiUtils.registerEngine(engineName, new OpenAiEngineImpl(apiKey, proxy));
+        AiUtils.registerHandler(handlerName, new OpenAiHandlerImpl(apiKey, proxy));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class OpenAiEngineTest {
                 .set("input", "This is test speech create! ")
                 ;
         String method = "speechCreate";
-        InputStream execute = AiUtils.execute(engineName, args, method, InputStream.class);
+        InputStream execute = AiUtils.execute(handlerName, args, method, InputStream.class);
         File file = FileUtil.writeFromStream(execute, "F:\\test\\testSpeechCreate.mp3");
         log.info("result: {}", file);
     }
@@ -58,7 +58,7 @@ public class OpenAiEngineTest {
                 )
         ;
         String method = "chat";
-        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        Dict execute = AiUtils.execute(handlerName, args, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
@@ -71,7 +71,7 @@ public class OpenAiEngineTest {
                 .set("prompt", "Say this is a test")
                 ;
         String method = "completion";
-        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        Dict execute = AiUtils.execute(handlerName, args, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
@@ -82,7 +82,7 @@ public class OpenAiEngineTest {
                 .set("input", "this is a test")
                 ;
         String method = "embedding";
-        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        Dict execute = AiUtils.execute(handlerName, args, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
@@ -102,14 +102,14 @@ public class OpenAiEngineTest {
                 .set("prompt", "A cute baby sea otter. ")
                 ;
         String method = "imageCreate";
-        Dict execute = AiUtils.execute(engineName, args, method, Dict.class);
+        Dict execute = AiUtils.execute(handlerName, args, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
     @Test
     public void testModels() {
         String method = "models";
-        Dict execute = AiUtils.execute(engineName, (Object) null, method, Dict.class);
+        Dict execute = AiUtils.execute(handlerName, (Object) null, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
     }
 
@@ -133,7 +133,7 @@ public class OpenAiEngineTest {
                 "不要写任何解释或其他文字和标点符号。\n" +
                 "\n" +
                 "用户问题：给张三发送离职信息邮件，邮件标题为张三的毕业祝贺，邮件内容为张三的基本信息的内容、张三的工龄（工龄需要根据公司的规定计算得出），并在邮件尾部加上祝您找到的更好的工作。";
-        String execute = AiUtils.execute(engineName, content, strategy, String.class);
+        String execute = AiUtils.execute(handlerName, content, strategy, String.class);
         log.info(execute);
     }
 
