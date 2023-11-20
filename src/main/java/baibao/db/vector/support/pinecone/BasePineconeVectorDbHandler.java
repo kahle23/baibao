@@ -4,12 +4,9 @@ import artoria.convert.ConversionUtils;
 import artoria.data.Dict;
 import artoria.data.bean.BeanUtils;
 import artoria.util.ObjectUtils;
-import baibao.db.vector.dto.*;
+import baibao.db.vector.dto.document.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVectorDbHandler {
 
@@ -25,7 +22,8 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
                     .set("topK", req.getTopK())
                     .set("includeValues", req.getIncludeVector())
                     .set("includeMetadata", true)
-                    .set("configCode", req.getConfigCode());
+                    .set("configCode", req.getConfigCode())
+            ;
         }
         // Conversion output parameter.
         if (DocQueryResp.class.isAssignableFrom(clazz)) {
@@ -33,9 +31,8 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
             Dict docQuery = (Dict) super.docQuery(condition, clazz);
             // Create DocQueryResp.
             List<DocQueryData> documents = new ArrayList<DocQueryData>();
-            DocQueryResp result = new DocQueryResp();
-            result.setCollection(docQuery.getString("namespace"));
-            result.setDocuments(documents);
+            DocQueryResp result = new DocQueryResp(
+                    docQuery.getString("namespace"), documents);
             // Convert data.
             @SuppressWarnings("rawtypes")
             List matches = (List) docQuery.get("matches");
@@ -65,9 +62,43 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
                     .set("ids", req.getIds())
                     .set("deleteAll", req.getDeleteAll())
                     .set("filter", req.getFilter())
+                    .set("configCode", req.getConfigCode())
             ;
         }
         return super.docDelete(condition, clazz);
+    }
+
+    @Override
+    public Object docFetch(Object condition, Class<?> clazz) {
+        // Conversion input parameter.
+        if (condition instanceof DocFetchReq) {
+            DocFetchReq req = (DocFetchReq) condition;
+            condition = Dict.of("namespace", req.getCollection())
+                    .set("ids", req.getIds())
+                    .set("configCode", req.getConfigCode())
+            ;
+        }
+        // Conversion output parameter.
+        if (DocFetchResp.class.isAssignableFrom(clazz)) {
+            // It must be Dict.
+            Dict docFetch = (Dict) super.docFetch(condition, clazz);
+            // Create DocFetchResp.
+            Map<String, DocBasicData> documents = new LinkedHashMap<String, DocBasicData>();
+            DocFetchResp result = new DocFetchResp(
+                    docFetch.getString("namespace"), documents);
+            // Convert data.
+            Map<String, Object> vectors = ObjectUtils.cast(docFetch.get("vectors"));
+            vectors = vectors != null ? vectors : Collections.<String, Object>emptyMap();
+            for (Map.Entry<String, Object> entry : vectors.entrySet()) {
+                Dict dict = Dict.of(BeanUtils.beanToMap(entry.getValue()));
+                String id = dict.getString("id");
+                List<Object> values = ObjectUtils.cast(dict.get("values"));
+                Map<Object, Object> metadata = ObjectUtils.cast(dict.get("metadata"));
+                documents.put(id, new DocBasicData(id, values, metadata));
+            }
+            return result;
+        }
+        else { return super.docFetch(condition, clazz); }
     }
 
     @Override

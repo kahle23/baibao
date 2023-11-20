@@ -1,4 +1,4 @@
-package baibao.db.vector.dto;
+package baibao.db.vector.dto.document;
 
 import java.util.List;
 import java.util.Map;

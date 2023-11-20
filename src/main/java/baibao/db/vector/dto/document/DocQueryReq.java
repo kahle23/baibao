@@ -1,10 +1,9 @@
-package baibao.db.vector.dto;
+package baibao.db.vector.dto.document;
 
 import java.util.List;
 
 public class DocQueryReq {
     private String  collection;
-    private String  partition;
     private String  id;
     private List<Object> vector;
     private Object  filter;
@@ -20,16 +19,6 @@ public class DocQueryReq {
     public void setCollection(String collection) {
 
         this.collection = collection;
-    }
-
-    public String getPartition() {
-
-        return partition;
-    }
-
-    public void setPartition(String partition) {
-
-        this.partition = partition;
     }
 
     public String getId() {

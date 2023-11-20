@@ -1,10 +1,9 @@
-package baibao.db.vector.dto;
+package baibao.db.vector.dto.document;
 
 import java.util.List;
 
 public class DocUpsertReq {
     private String collection;
-    private String partition;
     private List<DocBasicData> documents;
     private String configCode;
 
@@ -16,16 +15,6 @@ public class DocUpsertReq {
     public void setCollection(String collection) {
 
         this.collection = collection;
-    }
-
-    public String getPartition() {
-
-        return partition;
-    }
-
-    public void setPartition(String partition) {
-
-        this.partition = partition;
     }
 
     public List<DocBasicData> getDocuments() {

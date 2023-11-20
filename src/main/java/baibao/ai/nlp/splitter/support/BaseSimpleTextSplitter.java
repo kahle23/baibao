@@ -42,9 +42,15 @@ public abstract class BaseSimpleTextSplitter extends AbstractClassicAiHandler {
         if (separators == null) { separators = config.getSeparators(); }
         if (chunkSize == null) { chunkSize = config.getChunkSize(); }
         TextSplitResp resp = new TextSplitResp(new ArrayList<String>());
-        //
-        // separators only one.
-        String separator = separators.get(ZERO);
+        // Get existing separator.
+        String separator = null;
+        for (String str : separators) {
+            if (str == null) { continue; }
+            if (text.indexOf(str) > ZERO) {
+                separator = str; break;
+            }
+        }
+        // Split text.
         List<String> splitTexts = separator != null
                 ? Arrays.asList(text.split(separator)) : Collections.singletonList(text);
         for (String splitText : splitTexts) {
@@ -62,7 +68,7 @@ public abstract class BaseSimpleTextSplitter extends AbstractClassicAiHandler {
                 resp.getSplitTexts().add(text.substring(beginIndex, endIndex));
             }
         }
-
+        // The result.
         return resp;
     }
 

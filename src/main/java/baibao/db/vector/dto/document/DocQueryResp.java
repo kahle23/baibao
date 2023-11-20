@@ -1,12 +1,20 @@
-package baibao.db.vector.dto;
+package baibao.db.vector.dto.document;
 
 import java.util.List;
 
 public class DocQueryResp {
     private String collection;
-    private String partition;
     private String requestId;
     private List<DocQueryData> documents;
+
+    public DocQueryResp(String collection, List<DocQueryData> documents) {
+        this.collection = collection;
+        this.documents = documents;
+    }
+
+    public DocQueryResp() {
+
+    }
 
     public String getCollection() {
 
@@ -16,15 +24,6 @@ public class DocQueryResp {
     public void setCollection(String collection) {
 
         this.collection = collection;
-    }
-
-    public String getPartition() {
-        return partition;
-    }
-
-    public void setPartition(String partition) {
-
-        this.partition = partition;
     }
 
     public String getRequestId() {

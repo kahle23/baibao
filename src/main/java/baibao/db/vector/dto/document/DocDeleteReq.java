@@ -1,13 +1,13 @@
-package baibao.db.vector.dto;
+package baibao.db.vector.dto.document;
 
 import java.util.List;
 
 public class DocDeleteReq {
     private String collection;
-    private String partition;
     private List<String> ids;
     private Boolean deleteAll;
     private Object  filter;
+    private String  configCode;
 
     public String getCollection() {
 
@@ -17,16 +17,6 @@ public class DocDeleteReq {
     public void setCollection(String collection) {
 
         this.collection = collection;
-    }
-
-    public String getPartition() {
-
-        return partition;
-    }
-
-    public void setPartition(String partition) {
-
-        this.partition = partition;
     }
 
     public List<String> getIds() {
@@ -57,6 +47,16 @@ public class DocDeleteReq {
     public void setFilter(Object filter) {
 
         this.filter = filter;
+    }
+
+    public String getConfigCode() {
+
+        return configCode;
+    }
+
+    public void setConfigCode(String configCode) {
+
+        this.configCode = configCode;
     }
 
 }
