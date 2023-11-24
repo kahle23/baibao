@@ -1,13 +1,13 @@
-package baibao.ai.llm.dto.embedding;
+package baibao.ai.llm.dto.chat;
 
 import java.util.List;
 
-public class EmbeddingResp {
+public class ChatResp {
     private String id;
     private String object;
     private String model;
     private Long   created;
-    private List<EmbeddingData> data;
+    private List<Choice> choices;
 
     public String getId() {
 
@@ -49,14 +49,14 @@ public class EmbeddingResp {
         this.created = created;
     }
 
-    public List<EmbeddingData> getData() {
+    public List<Choice> getChoices() {
 
-        return data;
+        return choices;
     }
 
-    public void setData(List<EmbeddingData> data) {
+    public void setChoices(List<Choice> choices) {
 
-        this.data = data;
+        this.choices = choices;
     }
 
 }

@@ -2,8 +2,12 @@ package baibao.ai.llm.support.openai;
 
 import artoria.ai.AiUtils;
 import artoria.data.Dict;
+import artoria.data.StreamDataHandler;
 import artoria.data.json.JsonUtils;
 import artoria.data.json.support.FastJsonHandler;
+import baibao.ai.llm.dto.chat.ChatMessage;
+import baibao.ai.llm.dto.chat.ChatReq;
+import baibao.ai.llm.dto.chat.ChatResp;
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson.JSON;
 import org.junit.Ignore;
@@ -15,6 +19,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Ignore
@@ -60,6 +65,43 @@ public class OpenAiHandlerTest {
         String method = "chat";
         Dict execute = AiUtils.execute(handlerName, args, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
+    }
+
+    @Test
+    public void testChat1() {
+        ChatReq req = new ChatReq(new ArrayList<ChatMessage>(), "gpt-3.5-turbo-0613");
+        req.setTemperature(1.9);
+        req.getMessages().add(new ChatMessage("system", "You are a helpful assistant."));
+        req.getMessages().add(new ChatMessage("user", "what is AI?"));
+        String method = "chat";
+        ChatResp resp = AiUtils.execute(handlerName, req, method, ChatResp.class);
+        log.info("result: {}", JSON.toJSONString(resp, Boolean.TRUE));
+    }
+
+    @Test
+    public void testChat2() {
+        ChatReq req = new ChatReq(new ArrayList<ChatMessage>(), "gpt-3.5-turbo-0613");
+//        req.setTemperature(1.9);
+        req.setStream(true);
+        req.getMessages().add(new ChatMessage("system", "You are a helpful assistant."));
+        req.getMessages().add(new ChatMessage("user", "what is AI?"));
+        req.setStreamDataHandler(new StreamDataHandler() {
+            @Override
+            public void handle(Object... arguments) {
+                String line = String.valueOf(arguments[4]);
+                System.out.println(line);
+//                if (StrUtil.isBlank(line)) { return; }
+//                line = line.trim();
+//                String substring = line.substring("data: ".length());
+//                Dict dict = JSON.parseObject(substring, Dict.class);
+//                Array choices = Array.of((List) dict.get("choices"));
+//                Object delta = Dict.of(BeanUtils.beanToMap(choices.get(0))).get("delta");
+//                String content = Dict.of(BeanUtils.beanToMap(delta)).getString("content");
+//                System.out.print(content);
+            }
+        });
+        String method = "chat";
+        AiUtils.execute(handlerName, req, method, Object.class);
     }
 
     @Test
@@ -111,30 +153,6 @@ public class OpenAiHandlerTest {
         String method = "models";
         Dict execute = AiUtils.execute(handlerName, (Object) null, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
-    }
-
-    @Test
-    public void test3() {
-        String strategy = "chat";
-        String content = "目前有以下功能处理器：\n" +
-                "名称：邮件发送处理器\n" +
-                "关键词：邮件发送\n" +
-                "\n" +
-                "名称：知识库数据查询处理器\n" +
-                "关键词：知识库、员工守则、公司规定、公司新规、工龄、工龄计算规则、请假\n" +
-                "\n" +
-                "名称：百度数据查询处理器\n" +
-                "关键词：互联网数据查询、百度查询、百度数据\n" +
-                "\n" +
-                "名称：员工信息查询处理器\n" +
-                "关键词：员工信息、员工、员工数据、入离职信息\n" +
-                "\n" +
-                "请根据用户问题，判断需要调用哪几个功能处理器，用英文逗号分隔，需要优先执行的在前，一般情况下数据查询类处理器需要优先执行。\n" +
-                "不要写任何解释或其他文字和标点符号。\n" +
-                "\n" +
-                "用户问题：给张三发送离职信息邮件，邮件标题为张三的毕业祝贺，邮件内容为张三的基本信息的内容、张三的工龄（工龄需要根据公司的规定计算得出），并在邮件尾部加上祝您找到的更好的工作。";
-        String execute = AiUtils.execute(handlerName, content, strategy, String.class);
-        log.info(execute);
     }
 
 }

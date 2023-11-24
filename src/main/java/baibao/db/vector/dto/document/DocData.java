@@ -3,18 +3,18 @@ package baibao.db.vector.dto.document;
 import java.util.List;
 import java.util.Map;
 
-public class DocBasicData {
+public class DocData {
     private Map<Object, Object> data;
     private List<Object> vector;
     private String id;
 
-    public DocBasicData(String id, List<Object> vector, Map<Object, Object> data) {
+    public DocData(String id, List<Object> vector, Map<Object, Object> data) {
         this.vector = vector;
         this.data = data;
         this.id = id;
     }
 
-    public DocBasicData() {
+    public DocData() {
 
     }
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DocUpsertReq {
     private String collection;
-    private List<DocBasicData> documents;
+    private List<DocData> documents;
     private String configCode;
 
     public String getCollection() {
@@ -17,12 +17,12 @@ public class DocUpsertReq {
         this.collection = collection;
     }
 
-    public List<DocBasicData> getDocuments() {
+    public List<DocData> getDocuments() {
 
         return documents;
     }
 
-    public void setDocuments(List<DocBasicData> documents) {
+    public void setDocuments(List<DocData> documents) {
 
         this.documents = documents;
     }

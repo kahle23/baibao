@@ -1,9 +1,12 @@
 package baibao.ai.llm.support.openai;
 
 import artoria.ai.support.AbstractClassicAiHandler;
+import artoria.common.constant.Symbols;
 import artoria.data.Dict;
+import artoria.data.StreamDataHandler;
 import artoria.data.bean.BeanUtils;
 import artoria.data.json.JsonUtils;
+import artoria.exception.ExceptionUtils;
 import artoria.net.http.HttpMethod;
 import artoria.util.Assert;
 import cn.hutool.core.map.MapUtil;
@@ -14,7 +17,9 @@ import cn.hutool.http.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Proxy;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -54,11 +59,35 @@ public abstract class AbstractOpenAiHandler extends AbstractClassicAiHandler {
         Assert.state(StrUtil.isBlank(code)&&StrUtil.isBlank(message), message);
     }
 
+    protected void handleStream(InputStream inputStream, Charset charset, StreamDataHandler streamHandler) {
+        try {
+            // Create BufferedReader.
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(inputStream, charset));
+            //
+            String line;
+            while (!"data: [DONE]".equals(line = reader.readLine())) {
+                streamHandler.handle(null, null, null, null, line + Symbols.LINE_FEED);
+            }
+            // last
+            streamHandler.handle(null, null, null, null, line + Symbols.LINE_FEED);
+        }
+        catch (Exception e) {
+            throw ExceptionUtils.wrap(e);
+        }
+    }
+
     protected Object doHttp(HttpMethod method, Integer inputType, String url, Object input, Config config) {
         // Get stream value.
         Dict inputData = Dict.of(BeanUtils.beanToMap(input));
+        StreamDataHandler streamHandler = (StreamDataHandler) inputData.get("streamDataHandler");
+        inputData.remove("streamDataHandler");
         Boolean stream = inputData.getBoolean("stream");
         if (stream == null) { stream = false; }
+        if (stream) {
+            Assert.notNull(streamHandler, "When the parameter \"stream\" is true, " +
+                    "the parameter \"streamDataHandler\" cannot be null. ");
+        }
         // Get apiKey, proxy and debug.
         String apiKey = config.getApiKey();
         Proxy proxy = config.getProxy();
@@ -95,6 +124,7 @@ public abstract class AbstractOpenAiHandler extends AbstractClassicAiHandler {
             // Is stream, but content-type no event-stream.
             // Most of the time it's because something went wrong.
             HttpResponse response = request.executeAsync();
+            Charset charset = Charset.forName(response.charset());
             if (!response.header("Content-Type").contains("event-stream")) {
                 String streamStrBody = response.body();
                 Dict result = JsonUtils.parseObject(streamStrBody, Dict.class);
@@ -103,10 +133,14 @@ public abstract class AbstractOpenAiHandler extends AbstractClassicAiHandler {
                     log.info("The openai api request url \"{}\"(stream: {}) response is \"{}\"."
                             , url, true, streamStrBody);
                 }
-                return new ByteArrayInputStream(streamStrBody.getBytes(Charset.forName(response.charset())));
+                return result;
             }
             // Return InputStream.
-            else { return response.bodyStream(); }
+            else {
+                InputStream inputStream = response.bodyStream();
+                handleStream(inputStream, charset, streamHandler);
+                return null;
+            }
         }
         else {
             // Non stream, but some time content-type no json.

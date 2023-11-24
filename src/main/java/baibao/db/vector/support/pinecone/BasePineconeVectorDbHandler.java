@@ -83,7 +83,7 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
             // It must be Dict.
             Dict docFetch = (Dict) super.docFetch(condition, clazz);
             // Create DocFetchResp.
-            Map<String, DocBasicData> documents = new LinkedHashMap<String, DocBasicData>();
+            Map<String, DocData> documents = new LinkedHashMap<String, DocData>();
             DocFetchResp result = new DocFetchResp(
                     docFetch.getString("namespace"), documents);
             // Convert data.
@@ -94,7 +94,7 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
                 String id = dict.getString("id");
                 List<Object> values = ObjectUtils.cast(dict.get("values"));
                 Map<Object, Object> metadata = ObjectUtils.cast(dict.get("metadata"));
-                documents.put(id, new DocBasicData(id, values, metadata));
+                documents.put(id, new DocData(id, values, metadata));
             }
             return result;
         }
@@ -107,11 +107,11 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
         if (data instanceof DocUpsertReq) {
             DocUpsertReq req = (DocUpsertReq) data;
             // Get document data.
-            List<DocBasicData> documents = req.getDocuments();
-            documents = documents != null ? documents : Collections.<DocBasicData>emptyList();
+            List<DocData> documents = req.getDocuments();
+            documents = documents != null ? documents : Collections.<DocData>emptyList();
             // convert vectors
             List<Dict> vectors = new ArrayList<Dict>();
-            for (DocBasicData docData : documents) {
+            for (DocData docData : documents) {
                 if (docData == null) { continue; }
                 Dict dict = Dict.of("id", docData.getId())
                         .set("values", docData.getVector())

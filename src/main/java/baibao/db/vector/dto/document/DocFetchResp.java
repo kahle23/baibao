@@ -3,10 +3,10 @@ package baibao.db.vector.dto.document;
 import java.util.Map;
 
 public class DocFetchResp {
-    private Map<String, DocBasicData> documents;
+    private Map<String, DocData> documents;
     private String collection;
 
-    public DocFetchResp(String collection, Map<String, DocBasicData> documents) {
+    public DocFetchResp(String collection, Map<String, DocData> documents) {
         this.collection = collection;
         this.documents = documents;
     }
@@ -25,12 +25,12 @@ public class DocFetchResp {
         this.collection = collection;
     }
 
-    public Map<String, DocBasicData> getDocuments() {
+    public Map<String, DocData> getDocuments() {
 
         return documents;
     }
 
-    public void setDocuments(Map<String, DocBasicData> documents) {
+    public void setDocuments(Map<String, DocData> documents) {
 
         this.documents = documents;
     }

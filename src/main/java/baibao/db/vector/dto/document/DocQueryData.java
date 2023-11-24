@@ -3,7 +3,7 @@ package baibao.db.vector.dto.document;
 import java.util.List;
 import java.util.Map;
 
-public class DocQueryData extends DocBasicData {
+public class DocQueryData extends DocData {
     private Object score;
 
     public DocQueryData(String id, List<Object> vector, Map<Object, Object> data) {
