@@ -1,8 +1,9 @@
 package baibao.ai.llm.dto.embedding;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class EmbeddingResp {
+public class EmbeddingResp implements Serializable {
     private String id;
     private String object;
     private String model;

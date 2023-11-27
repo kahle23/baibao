@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.Proxy;
 import java.nio.charset.Charset;
 import java.util.Map;
@@ -339,7 +340,7 @@ public abstract class AbstractOpenAiHandler extends AbstractClassicAiHandler {
      * The openai ai engine configuration.
      * @author Kahle
      */
-    public static class Config {
+    public static class Config implements Serializable {
         private String apiKey;
         private Proxy  proxy;
         private Boolean debug;

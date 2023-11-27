@@ -1,8 +1,9 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DocDeleteReq {
+public class DocDeleteReq implements Serializable {
     private String collection;
     private List<String> ids;
     private Boolean deleteAll;

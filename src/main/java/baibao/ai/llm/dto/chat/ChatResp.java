@@ -1,8 +1,9 @@
 package baibao.ai.llm.dto.chat;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ChatResp {
+public class ChatResp implements Serializable {
     private String id;
     private String object;
     private String model;

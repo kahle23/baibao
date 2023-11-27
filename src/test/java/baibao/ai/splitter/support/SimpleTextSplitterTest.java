@@ -1,4 +1,4 @@
-package baibao.ai.nlp.splitter.support;
+package baibao.ai.splitter.support;
 
 import artoria.ai.AiUtils;
 import cn.hutool.core.io.FileUtil;

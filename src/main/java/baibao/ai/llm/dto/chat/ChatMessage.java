@@ -1,6 +1,8 @@
 package baibao.ai.llm.dto.chat;
 
-public class ChatMessage extends Message {
+import java.io.Serializable;
+
+public class ChatMessage extends Message implements Serializable {
     private String name;
 
     public ChatMessage(String role, String name, Object content) {

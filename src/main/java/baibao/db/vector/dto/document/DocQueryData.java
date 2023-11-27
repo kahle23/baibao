@@ -1,9 +1,10 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class DocQueryData extends DocData {
+public class DocQueryData extends DocData implements Serializable {
     private Object score;
 
     public DocQueryData(String id, List<Object> vector, Map<Object, Object> data) {

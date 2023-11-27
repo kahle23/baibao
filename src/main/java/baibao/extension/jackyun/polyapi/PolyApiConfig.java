@@ -1,10 +1,12 @@
 package baibao.extension.jackyun.polyapi;
 
+import java.io.Serializable;
+
 /**
  * 菠萝派平台的配置类.
  * @author Kahle
  */
-public class PolyApiConfig {
+public class PolyApiConfig implements Serializable {
     /**
      * 菠萝派平台的推送接口地址.
      */

@@ -17,6 +17,7 @@ import cn.hutool.http.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.net.Proxy;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -122,7 +123,7 @@ public abstract class AbstractYcmAiHandler extends AbstractClassicAiHandler {
         return doHttp(HttpMethod.POST, url, inputData, config);
     }
 
-    public static class Config {
+    public static class Config implements Serializable {
         private String accessKey;
         private String secretKey;
         private Long   modelId;

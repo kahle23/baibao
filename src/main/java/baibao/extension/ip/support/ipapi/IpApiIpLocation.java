@@ -3,6 +3,8 @@ package baibao.extension.ip.support.ipapi;
 import artoria.util.StringUtils;
 import baibao.extension.ip.IpLocation;
 
+import java.io.Serializable;
+
 import static artoria.common.Constants.BLANK_SPACE;
 import static artoria.common.Constants.EMPTY_STRING;
 
@@ -11,7 +13,7 @@ import static artoria.common.Constants.EMPTY_STRING;
  * @see <a href="https://en.wikipedia.org/wiki/IP_address">IP address</a>
  * @author Kahle
  */
-public class IpApiIpLocation extends IpLocation {
+public class IpApiIpLocation extends IpLocation implements Serializable {
     private String org;
     private String timezone;
     private String zip;

@@ -1,11 +1,12 @@
-package baibao.ai.nlp.splitter.support;
+package baibao.ai.splitter.support;
 
 import artoria.ai.support.AbstractClassicAiHandler;
 import artoria.util.Assert;
-import baibao.ai.nlp.splitter.dto.TextSplitReq;
-import baibao.ai.nlp.splitter.dto.TextSplitResp;
+import baibao.ai.splitter.dto.TextSplitReq;
+import baibao.ai.splitter.dto.TextSplitResp;
 import cn.hutool.core.util.StrUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,7 +73,7 @@ public abstract class BaseSimpleTextSplitter extends AbstractClassicAiHandler {
         return resp;
     }
 
-    public static class Config {
+    public static class Config implements Serializable {
         /**
          * Follow the list to find if a separator is included, split with the first existing separator.
          */

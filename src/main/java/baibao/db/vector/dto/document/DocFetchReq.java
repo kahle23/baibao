@@ -1,8 +1,9 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DocFetchReq {
+public class DocFetchReq implements Serializable {
     private String collection;
     private List<String> ids;
     private String configCode;

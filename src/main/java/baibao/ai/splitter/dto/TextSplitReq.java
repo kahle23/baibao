@@ -1,8 +1,9 @@
-package baibao.ai.nlp.splitter.dto;
+package baibao.ai.splitter.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TextSplitReq {
+public class TextSplitReq implements Serializable {
     /**
      * The text separator, split in order until the chunkSize is met or List end.
      */

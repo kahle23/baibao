@@ -1,4 +1,4 @@
-package baibao.ai.nlp.splitter.support;
+package baibao.ai.splitter.support;
 
 public class SimpleTextSplitterImpl extends BaseSimpleTextSplitter {
     private final Config config;

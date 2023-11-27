@@ -1,8 +1,9 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DocUpsertReq {
+public class DocUpsertReq implements Serializable {
     private String collection;
     private List<DocData> documents;
     private String configCode;

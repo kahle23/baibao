@@ -1,8 +1,9 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class DocQueryReq {
+public class DocQueryReq implements Serializable {
     private String  collection;
     private String  id;
     private List<Object> vector;

@@ -1,8 +1,9 @@
-package baibao.ai.nlp.splitter.dto;
+package baibao.ai.splitter.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class TextSplitResp {
+public class TextSplitResp implements Serializable {
     private List<String> splitTexts;
 
     public TextSplitResp(List<String> splitTexts) {

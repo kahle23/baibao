@@ -1,6 +1,8 @@
 package baibao.ai.llm.dto.chat;
 
-public class Choice {
+import java.io.Serializable;
+
+public class Choice implements Serializable {
     private String  finishReason;
     private Message message;
     private Integer index;

@@ -1,6 +1,8 @@
 package baibao.extension.device;
 
-public class DeviceQuery {
+import java.io.Serializable;
+
+public class DeviceQuery implements Serializable {
     private String model;
     private String type;
     private String language;

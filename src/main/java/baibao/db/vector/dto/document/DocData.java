@@ -1,9 +1,10 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class DocData {
+public class DocData implements Serializable {
     private Map<Object, Object> data;
     private List<Object> vector;
     private String id;

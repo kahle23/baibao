@@ -14,6 +14,7 @@ import cn.hutool.http.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
 import java.net.Proxy;
 
 /**
@@ -22,7 +23,8 @@ import java.net.Proxy;
  * <a href="https://docs.pinecone.io/reference">Pinecone API Reference</a>
  * @author Kahle
  */
-public abstract class AbstractPineconeVectorDbHandler extends AbstractClassicDbHandler implements VectorDbHandler {
+public abstract class AbstractPineconeVectorDbHandler
+        extends AbstractClassicDbHandler implements VectorDbHandler {
     private static final Logger log = LoggerFactory.getLogger(AbstractPineconeVectorDbHandler.class);
 
     /**
@@ -147,7 +149,7 @@ public abstract class AbstractPineconeVectorDbHandler extends AbstractClassicDbH
      * The pinecone database configuration.
      * @author Kahle
      */
-    public static class Config {
+    public static class Config implements Serializable {
         private String host;
         private String apiKey;
         private Proxy  proxy;

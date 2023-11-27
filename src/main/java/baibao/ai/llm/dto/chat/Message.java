@@ -1,6 +1,8 @@
 package baibao.ai.llm.dto.chat;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
     /**
      * tool calls
      */

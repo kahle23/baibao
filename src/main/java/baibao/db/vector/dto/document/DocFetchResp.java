@@ -1,8 +1,9 @@
 package baibao.db.vector.dto.document;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class DocFetchResp {
+public class DocFetchResp implements Serializable {
     private Map<String, DocData> documents;
     private String collection;
 

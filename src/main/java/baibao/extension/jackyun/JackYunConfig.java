@@ -1,10 +1,12 @@
 package baibao.extension.jackyun;
 
+import java.io.Serializable;
+
 /**
  * 吉客云开放平台的配置类.
  * @author Kahle
  */
-public class JackYunConfig {
+public class JackYunConfig implements Serializable {
     /**
      * 吉客云开放平台调用地址.
      * 调用地址线上环境：https://open.jackyun.com/open/openapi/do

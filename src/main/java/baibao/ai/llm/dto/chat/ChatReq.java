@@ -2,9 +2,10 @@ package baibao.ai.llm.dto.chat;
 
 import artoria.data.StreamDataHandler;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ChatReq {
+public class ChatReq implements Serializable {
     private StreamDataHandler streamDataHandler;
     private List<ChatMessage> messages;
     private String  model;
