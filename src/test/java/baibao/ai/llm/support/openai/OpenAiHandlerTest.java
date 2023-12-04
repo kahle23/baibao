@@ -8,6 +8,7 @@ import artoria.data.json.support.FastJsonHandler;
 import baibao.ai.llm.dto.chat.ChatMessage;
 import baibao.ai.llm.dto.chat.ChatReq;
 import baibao.ai.llm.dto.chat.ChatResp;
+import baibao.ai.llm.dto.chat.Tool;
 import cn.hutool.core.io.FileUtil;
 import com.alibaba.fastjson.JSON;
 import org.junit.Ignore;
@@ -56,7 +57,7 @@ public class OpenAiHandlerTest {
     public void testChat() {
         Dict args = Dict.of("model", "gpt-3.5-turbo-0613")
                 .set("temperature", 1.9)
-                .set("stream", true)
+//                .set("stream", true)
                 .set("messages", Arrays.asList(
                         Dict.of("role", "system").set("content", "You are a helpful assistant."),
                         Dict.of("role", "user").set("content", "what is AI?"))
@@ -70,7 +71,7 @@ public class OpenAiHandlerTest {
     @Test
     public void testChat1() {
         ChatReq req = new ChatReq(new ArrayList<ChatMessage>(), "gpt-3.5-turbo-0613");
-        req.setTemperature(1.9);
+//        req.setTemperature(1.9);
         req.getMessages().add(new ChatMessage("system", "You are a helpful assistant."));
         req.getMessages().add(new ChatMessage("user", "what is AI?"));
         String method = "chat";

@@ -10,6 +10,11 @@ public class ChatMessage extends Message implements Serializable {
         this.name = name;
     }
 
+    public ChatMessage(String role, Object content, String toolCallId, Object toolCalls) {
+
+        super(role, content, toolCallId, toolCalls);
+    }
+
     public ChatMessage(String role, Object content) {
 
         super(role, content);

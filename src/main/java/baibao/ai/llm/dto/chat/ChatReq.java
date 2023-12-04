@@ -7,11 +7,24 @@ import java.util.List;
 
 public class ChatReq implements Serializable {
     private StreamDataHandler streamDataHandler;
+    /**
+     * A list of messages comprising the conversation so far.
+     */
     private List<ChatMessage> messages;
+    /**
+     * The id of the model to use.
+     */
     private String  model;
     private Integer maxTokens;
+    /**
+     * If set, partial message deltas will be sent.
+     */
     private Boolean stream;
+    /**
+     * What sampling temperature to use.
+     */
     private Number  temperature;
+    private List<Tool> tools;
     private String  configCode;
 
     public ChatReq(List<ChatMessage> messages, String model, Boolean stream) {
@@ -87,6 +100,16 @@ public class ChatReq implements Serializable {
     public void setTemperature(Number temperature) {
 
         this.temperature = temperature;
+    }
+
+    public List<Tool> getTools() {
+
+        return tools;
+    }
+
+    public void setTools(List<Tool> tools) {
+
+        this.tools = tools;
     }
 
     public String getConfigCode() {

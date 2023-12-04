@@ -9,6 +9,7 @@ import baibao.ai.llm.dto.chat.*;
 import baibao.ai.llm.dto.embedding.EmbeddingData;
 import baibao.ai.llm.dto.embedding.EmbeddingReq;
 import baibao.ai.llm.dto.embedding.EmbeddingResp;
+import cn.hutool.core.collection.CollUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ public abstract class BaseOpenAiHandler extends AbstractOpenAiHandler {
                 if (message.getName() != null) {
                     dict.set("name", message.getName());
                 }
+                if (message.getToolCallId() != null) {
+                    dict.set("tool_call_id", message.getToolCallId());
+                }
                 if (message.getToolCalls() != null) {
                     dict.set("tool_calls", message.getToolCalls());
                 }
@@ -45,7 +49,7 @@ public abstract class BaseOpenAiHandler extends AbstractOpenAiHandler {
                 }
             }
             // Handle req.
-            input = Dict.of("streamDataHandler", streamHandler)
+            Dict inputDict = Dict.of("streamDataHandler", streamHandler)
                     .set("messages", msgArray)
                     .set("model", req.getModel())
                     .set("max_tokens", req.getMaxTokens())
@@ -53,6 +57,9 @@ public abstract class BaseOpenAiHandler extends AbstractOpenAiHandler {
                     .set("temperature", req.getTemperature())
                     .set("configCode", req.getConfigCode())
             ;
+            List<Tool> tools = req.getTools();
+            if (CollUtil.isNotEmpty(tools)) { inputDict.set("tools", tools); }
+            input = inputDict;
         }
         // Conversion output parameter.
         if ((stream == null || !stream) && ChatResp.class.isAssignableFrom(clazz)) {
