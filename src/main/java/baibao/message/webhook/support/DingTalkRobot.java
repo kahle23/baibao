@@ -23,7 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static artoria.common.Constants.*;
+import static artoria.common.constant.Algorithms.HMAC_SHA256;
+import static artoria.common.constant.Charsets.STR_UTF_8;
+import static artoria.common.constant.Charsets.UTF_8;
+import static artoria.common.constant.Numbers.FOUR;
+import static artoria.common.constant.Numbers.TWO;
 
 /**
  * The ding talk robot.
@@ -61,7 +65,7 @@ public class DingTalkRobot extends AbstractClassicMessageHandler {
             hmac.setSecretKey(secretKey);
             byte[] digest = hmac.digest(bytesToSign);
             String base64Str = CodecUtils.encodeToString(CodecUtils.BASE64, digest);
-            return URLEncoder.encode(base64Str, UTF_8);
+            return URLEncoder.encode(base64Str, STR_UTF_8);
         }
         catch (Exception e) {
             throw ExceptionUtils.wrap(e);
@@ -108,7 +112,7 @@ public class DingTalkRobot extends AbstractClassicMessageHandler {
             SimpleRequest request = new SimpleRequest();
             request.setUrl(fullUrl);
             request.setMethod(HttpMethod.POST);
-            request.setCharset(UTF_8);
+            request.setCharset(STR_UTF_8);
             request.addHeader("Content-Type", "application/json");
             if (message instanceof String) {
                 String str = String.valueOf(message);
