@@ -12,7 +12,7 @@ import artoria.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static artoria.common.Constants.UTF_8;
+import static artoria.common.constant.Charsets.STR_UTF_8;
 
 /**
  * Work WeChat message robot.
@@ -33,7 +33,7 @@ public class WxWorkMessageRobot extends AbstractClassicMessageHandler {
             SimpleRequest request = new SimpleRequest();
             request.setUrl(url);
             request.setMethod(HttpMethod.POST);
-            request.setCharset(UTF_8);
+            request.setCharset(STR_UTF_8);
             request.addHeader("Content-Type", "application/json");
 
             Dict dict = Dict.of("msgtype", "text").set("text", Dict.of("content", message));

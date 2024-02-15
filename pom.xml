@@ -57,12 +57,6 @@
         <!-- ///// begin artoria //// -->
         <dependency>
             <groupId>io.github.kahle23</groupId>
-            <artifactId>artoria</artifactId>
-            <version>1.0.0.2019102003-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.kahle23</groupId>
             <artifactId>artoria-extend</artifactId>
             <version>1.0.0.2019102003-SNAPSHOT</version>
         </dependency>

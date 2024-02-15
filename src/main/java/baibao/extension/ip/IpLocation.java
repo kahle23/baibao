@@ -5,8 +5,8 @@ import baibao.extension.location.Geolocation;
 
 import java.io.Serializable;
 
-import static artoria.common.Constants.BLANK_SPACE;
-import static artoria.common.Constants.EMPTY_STRING;
+import static artoria.common.constant.Symbols.BLANK_SPACE;
+import static artoria.common.constant.Symbols.EMPTY_STRING;
 
 /**
  * The network physical address object.

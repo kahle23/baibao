@@ -12,12 +12,11 @@ import artoria.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.Map;
 import java.util.SortedMap;
 
-import static artoria.common.Constants.UTF_8;
+import static artoria.common.constant.Charsets.UTF_8;
 
 /**
  * 抽象的吉客云相关处理器.
@@ -42,7 +41,7 @@ public abstract class AbstractJackYunHandler extends AbstractAutoOperateActionHa
         Assert.notNull(data, "Parameter \"data\" must not null. ");
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
-            byte[] textBytes = String.valueOf(data).getBytes(Charset.forName(UTF_8));
+            byte[] textBytes = String.valueOf(data).getBytes(UTF_8);
             byte[] md5Bytes = md5.digest(textBytes);
             StringBuilder hexValue = new StringBuilder();
             for (byte md5Byte : md5Bytes) {

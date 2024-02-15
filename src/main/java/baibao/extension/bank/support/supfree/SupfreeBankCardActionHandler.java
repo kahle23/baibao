@@ -17,7 +17,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static artoria.common.Constants.*;
+import static artoria.common.constant.Numbers.*;
 
 /**
  * Bank card information provider based on website "bankcard.supfree.net".

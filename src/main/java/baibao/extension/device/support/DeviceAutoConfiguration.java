@@ -3,7 +3,7 @@ package baibao.extension.device.support;
 import artoria.action.ActionUtils;
 import artoria.crypto.EncryptUtils;
 import artoria.file.Csv;
-import artoria.io.IOUtils;
+import artoria.io.util.IOUtils;
 import artoria.util.ClassLoaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.InputStream;
 
-import static artoria.common.Constants.DEFAULT_ENCODING_NAME;
+import static artoria.common.constant.Charsets.STR_UTF_8;
 
 @Deprecated
 @Configuration
@@ -31,7 +31,7 @@ public class DeviceAutoConfiguration implements InitializingBean, DisposableBean
         byte[] byteArray = IOUtils.toByteArray(inputStream);
         byte[] decrypt = EncryptUtils.decrypt(byteArray);
         Csv csv = new Csv();
-        csv.setCharset(DEFAULT_ENCODING_NAME);
+        csv.setCharset(STR_UTF_8);
         csv.readFromByteArray(decrypt);
         ActionUtils.registerHandler("device-query", new FileBasedDeviceActionHandler(csv));
     }
