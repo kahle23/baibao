@@ -1,18 +1,18 @@
 package baibao.io.oss.support.obs;
 
-import artoria.data.bean.BeanUtils;
-import artoria.exception.ExceptionUtils;
-import artoria.io.oss.OssBase;
-import artoria.io.oss.OssInfo;
-import artoria.io.oss.OssObject;
-import artoria.io.oss.support.AbstractOssStorage;
-import artoria.io.oss.support.OssObjectImpl;
-import artoria.util.Assert;
-import artoria.util.CloseUtils;
 import com.obs.services.ObsClient;
 import com.obs.services.model.ObjectListing;
 import com.obs.services.model.ObsObject;
 import com.obs.services.model.PutObjectResult;
+import kunlun.data.bean.BeanUtils;
+import kunlun.exception.ExceptionUtils;
+import kunlun.io.oss.OssBase;
+import kunlun.io.oss.OssInfo;
+import kunlun.io.oss.OssObject;
+import kunlun.io.oss.support.AbstractOssStorage;
+import kunlun.io.oss.support.OssObjectImpl;
+import kunlun.util.Assert;
+import kunlun.util.CloseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

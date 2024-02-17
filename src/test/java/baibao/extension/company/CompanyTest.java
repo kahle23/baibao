@@ -1,7 +1,7 @@
 package baibao.extension.company;
 
-import artoria.logging.Logger;
-import artoria.logging.LoggerFactory;
+import kunlun.logging.Logger;
+import kunlun.logging.LoggerFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 

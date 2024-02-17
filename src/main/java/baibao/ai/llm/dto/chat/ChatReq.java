@@ -1,6 +1,6 @@
 package baibao.ai.llm.dto.chat;
 
-import artoria.data.StreamDataHandler;
+import kunlun.data.StreamDataHandler;
 
 import java.io.Serializable;
 import java.util.List;

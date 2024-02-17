@@ -1,6 +1,6 @@
 package baibao.ai.splitter.support;
 
-import artoria.ai.AiUtils;
+import kunlun.ai.AiUtils;
 import cn.hutool.core.io.FileUtil;
 import org.junit.Ignore;
 import org.junit.Test;

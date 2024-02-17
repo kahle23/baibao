@@ -1,6 +1,6 @@
 package baibao.extension.ip.support.ipapi;
 
-import artoria.action.ActionUtils;
+import kunlun.action.ActionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;

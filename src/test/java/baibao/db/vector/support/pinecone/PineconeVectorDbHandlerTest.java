@@ -1,9 +1,9 @@
 package baibao.db.vector.support.pinecone;
 
-import artoria.data.Dict;
-import artoria.data.json.JsonUtils;
-import artoria.data.json.support.FastJsonHandler;
-import artoria.generator.id.IdUtils;
+import kunlun.data.Dict;
+import kunlun.data.json.JsonUtils;
+import kunlun.data.json.support.FastJsonHandler;
+import kunlun.generator.id.IdUtils;
 import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSON;
 import org.junit.Ignore;
