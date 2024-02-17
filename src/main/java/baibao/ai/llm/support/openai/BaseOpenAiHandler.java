@@ -1,15 +1,15 @@
 package baibao.ai.llm.support.openai;
 
-import artoria.data.Array;
-import artoria.data.Dict;
-import artoria.data.StreamDataHandler;
-import artoria.data.bean.BeanUtils;
-import artoria.util.ObjectUtils;
 import baibao.ai.llm.dto.chat.*;
 import baibao.ai.llm.dto.embedding.EmbeddingData;
 import baibao.ai.llm.dto.embedding.EmbeddingReq;
 import baibao.ai.llm.dto.embedding.EmbeddingResp;
 import cn.hutool.core.collection.CollUtil;
+import kunlun.data.Array;
+import kunlun.data.Dict;
+import kunlun.data.StreamDataHandler;
+import kunlun.data.bean.BeanUtils;
+import kunlun.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,14 +1,14 @@
 package baibao.extension.jackyun;
 
-import artoria.action.handler.AbstractAutoOperateActionHandler;
-import artoria.data.Dict;
-import artoria.data.json.JsonUtils;
-import artoria.exception.ExceptionUtils;
-import artoria.net.http.HttpMethod;
-import artoria.net.http.HttpResponse;
-import artoria.net.http.HttpUtils;
-import artoria.net.http.support.SimpleRequest;
-import artoria.util.Assert;
+import kunlun.action.support.AbstractAutoOperateActionHandler;
+import kunlun.data.Dict;
+import kunlun.data.json.JsonUtils;
+import kunlun.exception.ExceptionUtils;
+import kunlun.net.http.HttpMethod;
+import kunlun.net.http.HttpResponse;
+import kunlun.net.http.HttpUtils;
+import kunlun.net.http.support.SimpleRequest;
+import kunlun.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +16,7 @@ import java.security.MessageDigest;
 import java.util.Map;
 import java.util.SortedMap;
 
-import static artoria.common.constant.Charsets.UTF_8;
+import static kunlun.common.constant.Charsets.UTF_8;
 
 /**
  * 抽象的吉客云相关处理器.

@@ -1,10 +1,10 @@
 package baibao.ai.splitter.support;
 
-import artoria.ai.support.AbstractClassicAiHandler;
-import artoria.util.Assert;
 import baibao.ai.splitter.dto.TextSplitReq;
 import baibao.ai.splitter.dto.TextSplitResp;
 import cn.hutool.core.util.StrUtil;
+import kunlun.ai.support.AbstractClassicAiHandler;
+import kunlun.util.Assert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static artoria.common.constant.Numbers.ONE;
-import static artoria.common.constant.Numbers.ZERO;
 import static java.lang.Boolean.FALSE;
+import static kunlun.common.constant.Numbers.ONE;
+import static kunlun.common.constant.Numbers.ZERO;
 
 public abstract class BaseSimpleTextSplitter extends AbstractClassicAiHandler {
 

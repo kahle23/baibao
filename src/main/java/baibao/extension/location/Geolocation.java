@@ -1,6 +1,6 @@
 package baibao.extension.location;
 
-import artoria.data.geo.GeoCoordinate;
+import kunlun.data.geo.GeoCoordinate;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

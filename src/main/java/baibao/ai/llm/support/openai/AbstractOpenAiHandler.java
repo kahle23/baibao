@@ -1,19 +1,19 @@
 package baibao.ai.llm.support.openai;
 
-import artoria.ai.support.AbstractClassicAiHandler;
-import artoria.common.constant.Symbols;
-import artoria.data.Dict;
-import artoria.data.StreamDataHandler;
-import artoria.data.bean.BeanUtils;
-import artoria.data.json.JsonUtils;
-import artoria.exception.ExceptionUtils;
-import artoria.net.http.HttpMethod;
-import artoria.util.Assert;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.Method;
+import kunlun.ai.support.AbstractClassicAiHandler;
+import kunlun.common.constant.Symbols;
+import kunlun.data.Dict;
+import kunlun.data.StreamDataHandler;
+import kunlun.data.bean.BeanUtils;
+import kunlun.data.json.JsonUtils;
+import kunlun.exception.ExceptionUtils;
+import kunlun.net.http.HttpMethod;
+import kunlun.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,9 +25,9 @@ import java.net.Proxy;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import static artoria.common.constant.Numbers.*;
-import static artoria.net.http.HttpMethod.GET;
-import static artoria.net.http.HttpMethod.POST;
+import static kunlun.common.constant.Numbers.*;
+import static kunlun.net.http.HttpMethod.GET;
+import static kunlun.net.http.HttpMethod.POST;
 
 /**
  * The ai engine based on the openai api.

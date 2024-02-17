@@ -1,10 +1,10 @@
 package baibao.extension.device.support;
 
-import artoria.action.ActionUtils;
-import artoria.crypto.EncryptUtils;
-import artoria.file.Csv;
-import artoria.io.util.IOUtils;
-import artoria.util.ClassLoaderUtils;
+import kunlun.action.ActionUtils;
+import kunlun.crypto.EncryptUtils;
+import kunlun.file.Csv;
+import kunlun.io.util.IOUtils;
+import kunlun.util.ClassLoaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.InputStream;
 
-import static artoria.common.constant.Charsets.STR_UTF_8;
+import static kunlun.common.constant.Charsets.STR_UTF_8;
 
 @Deprecated
 @Configuration

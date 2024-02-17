@@ -1,10 +1,10 @@
 package baibao.db.vector.support.pinecone;
 
-import artoria.convert.ConversionUtils;
-import artoria.data.Dict;
-import artoria.data.bean.BeanUtils;
-import artoria.util.ObjectUtils;
 import baibao.db.vector.dto.document.*;
+import kunlun.convert.ConversionUtils;
+import kunlun.data.Dict;
+import kunlun.data.bean.BeanUtils;
+import kunlun.util.ObjectUtils;
 
 import java.util.*;
 

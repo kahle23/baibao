@@ -1,12 +1,12 @@
 package baibao.extension.ip;
 
-import artoria.util.StringUtils;
 import baibao.extension.location.Geolocation;
+import kunlun.util.StringUtils;
 
 import java.io.Serializable;
 
-import static artoria.common.constant.Symbols.BLANK_SPACE;
-import static artoria.common.constant.Symbols.EMPTY_STRING;
+import static kunlun.common.constant.Symbols.BLANK_SPACE;
+import static kunlun.common.constant.Symbols.EMPTY_STRING;
 
 /**
  * The network physical address object.
