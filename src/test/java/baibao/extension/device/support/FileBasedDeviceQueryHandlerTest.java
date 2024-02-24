@@ -1,10 +1,10 @@
 package baibao.extension.device.support;
 
-import kunlun.action.ActionUtils;
-import kunlun.exception.ExceptionUtils;
 import baibao.extension.device.Device;
 import baibao.extension.device.DeviceQuery;
 import com.alibaba.fastjson.JSON;
+import kunlun.action.ActionUtils;
+import kunlun.exception.ExceptionUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class FileBasedDeviceQueryHandlerTest {
             new DeviceAutoConfiguration().afterPropertiesSet();
 
             DeviceQuery deviceQuery = new DeviceQuery("SM901");
-            Device device = ActionUtils.execute(deviceQuery, "device-query", Device.class);
+            Device device = ActionUtils.execute("device-query", deviceQuery, Device.class);
             log.info(JSON.toJSONString(device, TRUE));
         }
         catch (Exception e) {

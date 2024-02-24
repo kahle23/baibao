@@ -136,7 +136,7 @@ public abstract class AbstractPolyApiHandler extends AbstractJackYunHandler {
     }
 
     @Override
-    public Object operate(Object input, String name, Class<?> clazz) {
+    public Object execute(Object input, String name, Class<?> clazz) {
         if ("validateSign".equals(name)) {
             Assert.notNull(input, "Parameter \"input\" must not null. ");
             Assert.isInstanceOf(PolyApiReq.class, input

@@ -1,10 +1,10 @@
 package baibao.extension.ip.support.ipapi;
 
+import baibao.extension.ip.IpQuery;
+import com.alibaba.fastjson.JSON;
 import kunlun.action.ActionUtils;
 import kunlun.data.json.JsonUtils;
 import kunlun.data.json.support.FastJsonHandler;
-import baibao.extension.ip.IpQuery;
-import com.alibaba.fastjson.JSON;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -21,11 +21,11 @@ public class IpApiIpQueryHandlerTest {
         ActionUtils.registerHandler(IP_QUERY_NAME, new IpApiIpActionHandler());
 
         IpQuery query = new IpQuery("223.98.40.191");
-        IpApiIpLocation ipLocation = ActionUtils.execute(query, IP_QUERY_NAME, IpApiIpLocation.class);
+        IpApiIpLocation ipLocation = ActionUtils.execute(IP_QUERY_NAME, query, IpApiIpLocation.class);
         log.info("{}", JSON.toJSONString(ipLocation, true));
 
         query = new IpQuery("106.57.23.1");
-        ipLocation = ActionUtils.execute(query, IP_QUERY_NAME, IpApiIpLocation.class);
+        ipLocation = ActionUtils.execute(IP_QUERY_NAME, query, IpApiIpLocation.class);
         log.info("{}", JSON.toJSONString(ipLocation, true));
 
         /*query = new IpQuery("120.231.22.221");
