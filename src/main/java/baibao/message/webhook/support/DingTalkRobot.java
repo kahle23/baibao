@@ -146,7 +146,7 @@ public class DingTalkRobot extends AbstractClassicMessageHandler {
     }
 
     @Override
-    public Object operate(Object input, String name, Class<?> clazz) {
+    public Object execute(Object input, String name, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Assert.notNull(clazz, "Parameter \"clazz\" must not null. ");
         if ("send".equals(name)) {

@@ -5,7 +5,7 @@
 
 package baibao.extension.jackyun;
 
-import kunlun.action.support.AbstractAutoOperateActionHandler;
+import kunlun.action.support.AbstractAutoStrategyActionHandler;
 import kunlun.data.Dict;
 import kunlun.data.json.JsonUtils;
 import kunlun.exception.ExceptionUtils;
@@ -27,7 +27,7 @@ import static kunlun.common.constant.Charsets.UTF_8;
  * 抽象的吉客云相关处理器.
  * @author Kahle
  */
-public abstract class AbstractJackYunHandler extends AbstractAutoOperateActionHandler {
+public abstract class AbstractJackYunHandler extends AbstractAutoStrategyActionHandler {
     private static final Logger log = LoggerFactory.getLogger(AbstractJackYunOpenApiHandler.class);
 
     public AbstractJackYunHandler(String actionName, Class<?> registeredClass) {
@@ -111,7 +111,7 @@ public abstract class AbstractJackYunHandler extends AbstractAutoOperateActionHa
     }
 
     @Override
-    public Object operate(Object input, String name, Class<?> clazz) {
+    public Object execute(Object input, String name, Class<?> clazz) {
 
         return invokeApi(input, name, clazz);
     }
