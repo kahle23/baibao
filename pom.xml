@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>io.github.kahle23</groupId>
+    <groupId>com.github.kahlkn</groupId>
     <artifactId>baibao</artifactId>
-    <version>1.0.0.20240405.beta</version>
+    <version>1.0.0.20240113.beta</version>
     <packaging>jar</packaging>
     <name>baibao</name>
     <url>https://github.com/kahlkn/baibao</url>
@@ -56,9 +56,9 @@
 
         <!-- ///// begin artoria //// -->
         <dependency>
-            <groupId>io.github.kahle23</groupId>
+            <groupId>com.github.kahlkn</groupId>
             <artifactId>artoria-extend</artifactId>
-            <version>1.0.0.2019102003-SNAPSHOT</version>
+            <version>1.0.0.20240113.beta</version>
         </dependency>
         <!-- ///// end artoria //// -->
 
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>2.0.9.RELEASE</version>
+            <version>2.5.15</version>
             <scope>provided</scope>
         </dependency>
         <!-- ///// end spring //// -->
@@ -133,10 +133,42 @@
         </dependency>
         <!-- ///// end aliyun //// -->
 
+        <!-- ///// begin alipay //// -->
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.9.124.ALL</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- ///// end alipay //// -->
+
+        <!--<dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>-->
+
+        <!-- ///// begin xml //// -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.10</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- ///// end xml //// -->
+
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-pay</artifactId>
+            <version>3.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.10.2</version>
+            <version>1.15.3</version>
             <scope>provided</scope>
         </dependency>
 
@@ -146,6 +178,14 @@
             <version>2.13.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>cn.jpush.api</groupId>
+            <artifactId>jpush-client</artifactId>
+            <version>3.4.3</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.huaweicloud</groupId>
             <artifactId>esdk-obs-java</artifactId>
