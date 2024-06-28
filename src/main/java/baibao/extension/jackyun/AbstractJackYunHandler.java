@@ -30,11 +30,6 @@ import static kunlun.common.constant.Charsets.UTF_8;
 public abstract class AbstractJackYunHandler extends AbstractAutoStrategyActionHandler {
     private static final Logger log = LoggerFactory.getLogger(AbstractJackYunOpenApiHandler.class);
 
-    public AbstractJackYunHandler(String actionName, Class<?> registeredClass) {
-
-        super(actionName, registeredClass);
-    }
-
     public AbstractJackYunHandler(String actionName) {
 
         super(actionName);
