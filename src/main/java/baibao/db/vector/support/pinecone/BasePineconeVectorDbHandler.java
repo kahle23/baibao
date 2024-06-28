@@ -5,7 +5,7 @@
 
 package baibao.db.vector.support.pinecone;
 
-import baibao.db.vector.dto.document.*;
+import baibao.db.vector.model.document.*;
 import kunlun.convert.ConversionUtils;
 import kunlun.data.Dict;
 import kunlun.data.bean.BeanUtils;
@@ -18,8 +18,8 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
     @Override
     public Object docQuery(Object condition, Class<?> clazz) {
         // Conversion input parameter.
-        if (condition instanceof DocQueryReq) {
-            DocQueryReq req = (DocQueryReq) condition;
+        if (condition instanceof DocQueryRequest) {
+            DocQueryRequest req = (DocQueryRequest) condition;
             condition = Dict.of("namespace", req.getCollection())
                     .set("id", req.getId())
                     .set("vector", req.getVector())
@@ -31,12 +31,12 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
             ;
         }
         // Conversion output parameter.
-        if (DocQueryResp.class.isAssignableFrom(clazz)) {
+        if (DocQueryResponse.class.isAssignableFrom(clazz)) {
             // It must be Dict.
             Dict docQuery = (Dict) super.docQuery(condition, clazz);
             // Create DocQueryResp.
             List<DocQueryData> documents = new ArrayList<DocQueryData>();
-            DocQueryResp result = new DocQueryResp(
+            DocQueryResponse result = new DocQueryResponse(
                     docQuery.getString("namespace"), documents);
             // Convert data.
             @SuppressWarnings("rawtypes")
@@ -61,8 +61,8 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
     @Override
     public Object docDelete(Object condition, Class<?> clazz) {
         // Conversion input parameter.
-        if (condition instanceof DocDeleteReq) {
-            DocDeleteReq req = (DocDeleteReq) condition;
+        if (condition instanceof DocDeleteRequest) {
+            DocDeleteRequest req = (DocDeleteRequest) condition;
             condition = Dict.of("namespace", req.getCollection())
                     .set("ids", req.getIds())
                     .set("deleteAll", req.getDeleteAll())
@@ -76,20 +76,20 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
     @Override
     public Object docFetch(Object condition, Class<?> clazz) {
         // Conversion input parameter.
-        if (condition instanceof DocFetchReq) {
-            DocFetchReq req = (DocFetchReq) condition;
+        if (condition instanceof DocFetchRequest) {
+            DocFetchRequest req = (DocFetchRequest) condition;
             condition = Dict.of("namespace", req.getCollection())
                     .set("ids", req.getIds())
                     .set("configCode", req.getConfigCode())
             ;
         }
         // Conversion output parameter.
-        if (DocFetchResp.class.isAssignableFrom(clazz)) {
+        if (DocFetchResponse.class.isAssignableFrom(clazz)) {
             // It must be Dict.
             Dict docFetch = (Dict) super.docFetch(condition, clazz);
             // Create DocFetchResp.
             Map<String, DocData> documents = new LinkedHashMap<String, DocData>();
-            DocFetchResp result = new DocFetchResp(
+            DocFetchResponse result = new DocFetchResponse(
                     docFetch.getString("namespace"), documents);
             // Convert data.
             Map<String, Object> vectors = ObjectUtils.cast(docFetch.get("vectors"));
@@ -109,8 +109,8 @@ public abstract class BasePineconeVectorDbHandler extends AbstractPineconeVector
     @Override
     public Object docUpsert(Object data, Class<?> clazz) {
         // Conversion input parameter.
-        if (data instanceof DocUpsertReq) {
-            DocUpsertReq req = (DocUpsertReq) data;
+        if (data instanceof DocUpsertRequest) {
+            DocUpsertRequest req = (DocUpsertRequest) data;
             // Get document data.
             List<DocData> documents = req.getDocuments();
             documents = documents != null ? documents : Collections.<DocData>emptyList();

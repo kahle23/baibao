@@ -27,11 +27,6 @@ import java.util.TreeMap;
 public abstract class AbstractPolyApiHandler extends AbstractJackYunHandler {
     private static final Logger log = LoggerFactory.getLogger(AbstractPolyApiHandler.class);
 
-    public AbstractPolyApiHandler(String actionName, Class<?> registeredClass) {
-
-        super(actionName, registeredClass);
-    }
-
     public AbstractPolyApiHandler(String actionName) {
 
         super(actionName);
