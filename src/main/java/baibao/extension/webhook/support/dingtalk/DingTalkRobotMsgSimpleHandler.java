@@ -3,14 +3,14 @@
  * BaiBao is licensed under the "LICENSE" file in the project's root directory.
  */
 
-package baibao.extension.webhook.dingtalk;
+package baibao.extension.webhook.support.dingtalk;
 
+import kunlun.action.support.AbstractStrategyActionHandler;
 import kunlun.codec.CodecUtils;
 import kunlun.crypto.Hmac;
 import kunlun.crypto.KeyUtils;
 import kunlun.data.json.JsonUtils;
 import kunlun.exception.ExceptionUtils;
-import kunlun.message.support.AbstractClassicMessageHandler;
 import kunlun.net.http.HttpClient;
 import kunlun.net.http.HttpMethod;
 import kunlun.net.http.HttpResponse;
@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Boolean.FALSE;
 import static kunlun.common.constant.Algorithms.HMAC_SHA256;
 import static kunlun.common.constant.Charsets.STR_UTF_8;
 import static kunlun.common.constant.Charsets.UTF_8;
@@ -38,19 +39,18 @@ import static kunlun.common.constant.Numbers.TWO;
  * The ding talk robot.
  * @author Kahle
  */
-@Deprecated
-public class DingTalkRobot extends AbstractClassicMessageHandler {
-    private static final Logger log = LoggerFactory.getLogger(DingTalkRobot.class);
+public class DingTalkRobotMsgSimpleHandler extends AbstractStrategyActionHandler {
+    private static final Logger log = LoggerFactory.getLogger(DingTalkRobotMsgSimpleHandler.class);
     private final HttpClient httpClient;
     private final String webHook;
     private final String secret;
 
-    public DingTalkRobot(String webHook, String secret) {
+    public DingTalkRobotMsgSimpleHandler(String webHook, String secret) {
 
         this(HttpUtils.getHttpClient(HttpUtils.getDefaultClientName()), webHook, secret);
     }
 
-    public DingTalkRobot(HttpClient httpClient, String webHook, String secret) {
+    public DingTalkRobotMsgSimpleHandler(HttpClient httpClient, String webHook, String secret) {
         Assert.notNull(httpClient, "Parameter \"httpClient\" must not null. ");
         Assert.notBlank(webHook, "Parameter \"webHook\" must not blank. ");
         Assert.notBlank(secret, "Parameter \"secret\" must not blank. ");
@@ -146,18 +146,11 @@ public class DingTalkRobot extends AbstractClassicMessageHandler {
     }
 
     @Override
-    public Object execute(Object input, String name, Class<?> clazz) {
+    public Object execute(Object input, String strategy, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Assert.notNull(clazz, "Parameter \"clazz\" must not null. ");
-        if ("send".equals(name)) {
-            isSupport(new Class[]{ String.class }, clazz);
-            return send(input);
-        }
-        else {
-            throw new UnsupportedOperationException(
-                    "Unsupported operation name \"" + name + "\"! "
-            );
-        }
+        Assert.isSupport(clazz, FALSE, String.class, Object.class);
+        return send(input);
     }
 
 }

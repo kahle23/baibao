@@ -3,12 +3,12 @@
  * BaiBao is licensed under the "LICENSE" file in the project's root directory.
  */
 
-package baibao.extension.webhook.wxwork;
+package baibao.extension.webhook.support.wxwork;
 
+import kunlun.action.support.AbstractStrategyActionHandler;
 import kunlun.data.Dict;
 import kunlun.data.json.JsonUtils;
 import kunlun.exception.ExceptionUtils;
-import kunlun.message.support.AbstractClassicMessageHandler;
 import kunlun.net.http.HttpMethod;
 import kunlun.net.http.HttpResponse;
 import kunlun.net.http.HttpUtils;
@@ -17,18 +17,18 @@ import kunlun.util.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.lang.Boolean.FALSE;
 import static kunlun.common.constant.Charsets.STR_UTF_8;
 
 /**
  * Work WeChat message robot.
  * @author Kahle
  */
-@Deprecated
-public class WxWorkMessageRobot extends AbstractClassicMessageHandler {
-    private static final Logger log = LoggerFactory.getLogger(WxWorkMessageRobot.class);
+public class WxWorkRobotMsgSimpleHandler extends AbstractStrategyActionHandler {
+    private static final Logger log = LoggerFactory.getLogger(WxWorkRobotMsgSimpleHandler.class);
     private final String url;
 
-    public WxWorkMessageRobot(String key) {
+    public WxWorkRobotMsgSimpleHandler(String key) {
         Assert.notBlank(key, "Parameter \"key\" must not blank. ");
         this.url = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key="+key;
     }
@@ -56,18 +56,11 @@ public class WxWorkMessageRobot extends AbstractClassicMessageHandler {
     }
 
     @Override
-    public Object execute(Object input, String name, Class<?> clazz) {
+    public Object execute(Object input, String strategy, Class<?> clazz) {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Assert.notNull(clazz, "Parameter \"clazz\" must not null. ");
-        if ("send".equals(name)) {
-            isSupport(new Class[]{ String.class }, clazz);
-            return send(input);
-        }
-        else {
-            throw new UnsupportedOperationException(
-                    "Unsupported operation name \"" + name + "\"! "
-            );
-        }
+        Assert.isSupport(clazz, FALSE, String.class, Object.class);
+        return send(input);
     }
 
 }
