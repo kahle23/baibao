@@ -1,9 +1,11 @@
 package baibao.ai.support.azure;
 
+import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import kunlun.ai.AIUtils;
 import kunlun.ai.support.model.ChatRequest;
 import kunlun.ai.support.model.ChatResponse;
+import kunlun.ai.support.model.Tool;
 import kunlun.core.function.Consumer;
 import kunlun.data.Dict;
 import kunlun.data.json.JsonUtils;
@@ -94,6 +96,24 @@ public class AzureOpenAIHandlerTest {
         String method = "embeddings";
         Dict execute = AIUtils.execute(handlerName, args, method, Dict.class);
         log.info("result: {}", JSON.toJSONString(execute, Boolean.TRUE));
+    }
+
+    @Test
+    public void testChatTool1() {
+        String toolParams = "{\"type\":\"object\",\"properties\":{\"location\":{\"type\":\"string\",\"description\":\"The city and state, e.g. San Francisco, CA\",\"properties\":{\"required\":true}},\"unit\":{\"type\":\"string\",\"enum\":[\"celsius\",\"fahrenheit\"],\"description\":\"The unit of temperature\",\"properties\":{\"required\":true}}}}";
+        ChatRequest request = ChatRequest.Builder.of(chatModel)
+//                .setTemperature(1.9)
+                .addMessage(SYSTEM, "You are a helpful assistant.")
+                .addMessage(USER, "What's the weather like in Shanghai today? ")
+                .addTool(Tool.Builder.of("function")
+                        .setFunction("get_current_weather",
+                                "Get the current weather in a given location.",
+                                JSONUtil.toBean(toolParams, Dict.class))
+                        .build())
+                .build();
+        String method = "chat";
+        ChatResponse response = AIUtils.execute(handlerName, request, method, ChatResponse.class);
+        log.info("result: {}", JSON.toJSONString(response, Boolean.TRUE));
     }
 
 }

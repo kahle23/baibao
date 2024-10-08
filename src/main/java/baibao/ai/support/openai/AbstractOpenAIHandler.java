@@ -8,6 +8,7 @@ package baibao.ai.support.openai;
 import baibao.ai.support.AbstractHttpApiAIHandler;
 import kunlun.data.Dict;
 import kunlun.util.Assert;
+import kunlun.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,10 +35,10 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
 
     @Override
     public Object execute(Object input, String operation, Class<?> clazz) {
-        if ("chat".equals(operation)) {
+        if (StringUtils.isBlank(operation) || AIMethods.CHAT.equals(operation)) {
             return chat(input, operation, clazz);
         }
-        else if ("embeddings".equals(operation)) {
+        else if (AIMethods.EMBEDDINGS.equals(operation)) {
             return embeddings(input, operation, clazz);
         }
         else if ("speechCreate".equals(operation)) {
@@ -97,7 +98,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Config config = getConfig(inputDict, operation, clazz);
         // Invoke http.
         Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/chat/completions")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData(inputDict));
@@ -120,7 +121,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Config config = getConfig(inputDict, operation, clazz);
         // Invoke http.
         Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/embeddings")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData(inputDict));
@@ -139,7 +140,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/audio/speech")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -156,7 +157,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/audio/transcriptions")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -173,7 +174,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/audio/translations")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -192,7 +193,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/completions")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -209,7 +210,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/images/generations")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -226,7 +227,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(THREE)
+                .setHttpType(THREE).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/images/edits")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -243,7 +244,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(THREE)
+                .setHttpType(THREE).setMethod(POST)
                 .setUrl("https://api.openai.com/v1/images/variations")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));
@@ -261,7 +262,7 @@ public abstract class AbstractOpenAIHandler extends AbstractHttpApiAIHandler {
         Assert.notNull(input, "Parameter \"input\" must not null. ");
         Config config = getConfig(input = Tool.ME.toDict(input), operation, clazz);
         return doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(GET).setHttpType(ONE)
+                .setHttpType(ONE).setMethod(GET)
                 .setUrl("https://api.openai.com/v1/models")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData((Dict) input));

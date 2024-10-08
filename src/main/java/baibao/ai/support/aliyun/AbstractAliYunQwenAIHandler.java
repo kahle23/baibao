@@ -2,6 +2,7 @@ package baibao.ai.support.aliyun;
 
 import baibao.ai.support.AbstractHttpApiAIHandler;
 import kunlun.data.Dict;
+import kunlun.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +28,10 @@ public abstract class AbstractAliYunQwenAIHandler extends AbstractHttpApiAIHandl
 
     @Override
     public Object execute(Object input, String operation, Class<?> clazz) {
-        if ("chat".equals(operation)) {
+        if (StringUtils.isBlank(operation) || AIMethods.CHAT.equals(operation)) {
             return chat(input, operation, clazz);
         }
-        else if ("embeddings".equals(operation)) {
+        else if (AIMethods.EMBEDDINGS.equals(operation)) {
             return embeddings(input, operation, clazz);
         }
         else {
@@ -52,7 +53,7 @@ public abstract class AbstractAliYunQwenAIHandler extends AbstractHttpApiAIHandl
         Config config = getConfig(inputDict, operation, clazz);
         // Invoke http.
         Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData(inputDict));
@@ -67,7 +68,7 @@ public abstract class AbstractAliYunQwenAIHandler extends AbstractHttpApiAIHandl
         Config config = getConfig(inputDict, operation, clazz);
         // Invoke http.
         Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData(inputDict));

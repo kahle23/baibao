@@ -69,7 +69,7 @@ public abstract class AbstractJackYunHandler extends AbstractAutoStrategyActionH
 
     protected String http(String info, HttpMethod method, String url, Map<?, ?> headers, Object data) {
         Assert.isInstanceOf(Map.class, data, "Parameter \"data\" must is instance of map. ");
-        SimpleRequest request = new SimpleRequest(url, method);
+        SimpleRequest request = SimpleRequest.of(method, url);
         request.addParameters((Map<?, ?>) data);
         HttpResponse response = HttpUtils.execute(request);
         return response.getBodyAsString();

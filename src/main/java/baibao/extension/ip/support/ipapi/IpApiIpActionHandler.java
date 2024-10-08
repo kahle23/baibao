@@ -39,8 +39,8 @@ public class IpApiIpActionHandler extends AbstractClassicActionHandler {
         String ipAddress = ipQuery.getIpAddress();
         String language = ipQuery.getLanguage();
         if (StringUtils.isBlank(language)) { language = "zh-CN"; }
-        SimpleRequest request = new SimpleRequest(
-                "http://ip-api.com/json/" + ipAddress + "?lang=" + language, HttpMethod.GET);
+        SimpleRequest request = SimpleRequest.of(HttpMethod.GET,
+                "http://ip-api.com/json/" + ipAddress + "?lang=" + language);
         String jsonString = HttpUtils.execute(request).getBodyAsString();
         if (StringUtils.isBlank(jsonString)) { return null; }
         ParameterizedType parameterizedType = TypeUtils.parameterizedOf(Map.class, String.class, String.class);

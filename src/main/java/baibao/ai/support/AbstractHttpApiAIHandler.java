@@ -8,9 +8,6 @@ package baibao.ai.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpRequest;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.Method;
 import kunlun.ai.support.AbstractStrategyAIHandler;
 import kunlun.ai.support.model.*;
 import kunlun.common.constant.Symbols;
@@ -21,9 +18,12 @@ import kunlun.data.bean.BeanUtils;
 import kunlun.data.json.JsonUtils;
 import kunlun.exception.ExceptionUtils;
 import kunlun.net.http.HttpMethod;
+import kunlun.net.http.HttpUtils;
+import kunlun.net.http.support.SimpleRequest;
+import kunlun.net.http.support.SimpleResponse;
 import kunlun.util.Assert;
+import kunlun.util.CollectionUtils;
 import kunlun.util.MapUtils;
-import kunlun.util.ObjectUtils;
 import kunlun.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import static kunlun.common.constant.Numbers.*;
-import static kunlun.net.http.HttpMethod.GET;
-import static kunlun.net.http.HttpMethod.POST;
+import static kunlun.util.ObjectUtils.cast;
 
 public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler {
     private static final Logger log = LoggerFactory.getLogger(AbstractHttpApiAIHandler.class);
@@ -88,14 +87,13 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(inputStream, charset));
             // Read line and consume.
-            String line;
-            while (!"data: [DONE]".equals(line = reader.readLine())) {
+            String line, finishTag = "data: [DONE]";
+            while (!finishTag.equals(line = reader.readLine())) {
                 consumer.accept(line + Symbols.LINE_FEED);
             }
             // Last line.
             consumer.accept(line + Symbols.LINE_FEED);
-        }
-        catch (Exception e) { throw ExceptionUtils.wrap(e); }
+        } catch (Exception e) { throw ExceptionUtils.wrap(e); }
     }
 
     /**
@@ -118,19 +116,22 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
         // If the config is included, delete it
         data.remove(CONFIG_KEY);
         // Create request.
-        HttpRequest request = HttpRequest.of(httpData.getUrl());
-        // Set request method.
-        if (POST.equals(httpData.getMethod())) { request.method(Method.POST); }
-        else if (GET.equals(httpData.getMethod())) { request.method(Method.GET); }
-        else { throw new UnsupportedOperationException("The http method is unsupported. "); }
+        SimpleRequest request =
+                SimpleRequest.of(httpData.getMethod(), httpData.getUrl());
+        request.setConnectTimeout(60000);
+        request.setReadTimeout(60000);
+        if (httpData.getValidateCertificate() != null) {
+            request.setValidateCertificate(httpData.getValidateCertificate());
+        }
         // Set request data.
         // Http input type: 0 unknown, 1 no content, 2 form-www, 3 form-data, 4 json
         Integer httpType = httpData.getHttpType();
         if (httpType == TWO || httpType == THREE) {
-            request.form(data);
+            request.addParameters(data);
         }
         else if (httpType == FOUR) {
-            request.body(JsonUtils.toJsonString(data));
+            request.addHeader("Content-Type", "application/json");
+            request.setBody(JsonUtils.toJsonString(data));
         }
         else if (httpType == ONE) {
             // no content
@@ -140,7 +141,7 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
         if (MapUtil.isNotEmpty(httpData.getHeaders())) {
             for (Map.Entry<String, Object> entry : httpData.getHeaders().entrySet()) {
                 Object val = entry.getValue();
-                request.header(entry.getKey(), val != null ? String.valueOf(val) : null);
+                request.addHeader(entry.getKey(), val != null ? String.valueOf(val) : null);
             }
         }
         // Set request proxy.
@@ -153,8 +154,8 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
         // Processing response.
         if (!stream) {
             // Non stream.
-            HttpResponse response = request.execute();
-            String body = response.body();
+            SimpleResponse response = (SimpleResponse) HttpUtils.execute(request);
+            String body = response.getBodyAsString();
             tool.logResponse(debug, httpData.getUrl(), body);
             Dict respData = JsonUtils.parseObject(body, Dict.class);
             tool.checkResult(respData);
@@ -162,10 +163,12 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
         }
         // Is stream, but content-type no event-stream.
         // Most of the time it's because something went wrong.
-        HttpResponse response = request.executeAsync();
-        Charset charset = Charset.forName(response.charset());
-        if (!response.header("Content-Type").contains("event-stream")) {
-            String body = response.body();
+        request.setStream(true);
+        SimpleResponse response = (SimpleResponse) HttpUtils.execute(request);
+        Charset charset = Charset.forName(response.getCharset());
+        String contentType = response.getFirstHeader("Content-Type");
+        if (StrUtil.isNotBlank(contentType) && !contentType.contains("event-stream")) {
+            String body = response.getBodyAsString();
             tool.logResponse(debug, httpData.getUrl(), body);
             Dict respData = JsonUtils.parseObject(body, Dict.class);
             tool.checkResult(respData);
@@ -173,10 +176,25 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
         }
         // Return InputStream.
         else {
-            InputStream inputStream = response.bodyStream();
+            InputStream inputStream = response.getBodyStream();
             doStream(inputStream, charset, streamConsumer);
             return null;
         }
+    }
+
+    /**
+     * The internal AI methods constants.
+     * @author Kahle
+     */
+    protected static class AIMethods {
+        /**
+         * The AI method "chat".
+         */
+        public static final String CHAT = "chat";
+        /**
+         * The AI method "embeddings".
+         */
+        public static final String EMBEDDINGS = "embeddings";
     }
 
     /**
@@ -186,8 +204,9 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
     protected static class HttpData {
         private InnerTool tool;
         private AbstractConfig config;
-        private HttpMethod method;
+        private Boolean validateCertificate;
         private Integer httpType;
+        private HttpMethod method;
         private String url;
         private Dict headers;
         private Dict data;
@@ -222,13 +241,13 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
             return this;
         }
 
-        public HttpMethod getMethod() {
+        public Boolean getValidateCertificate() {
 
-            return method;
+            return validateCertificate;
         }
 
-        public HttpData setMethod(HttpMethod method) {
-            this.method = method;
+        public HttpData setValidateCertificate(Boolean validateCertificate) {
+            this.validateCertificate = validateCertificate;
             return this;
         }
 
@@ -239,6 +258,16 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
 
         public HttpData setHttpType(Integer httpType) {
             this.httpType = httpType;
+            return this;
+        }
+
+        public HttpMethod getMethod() {
+
+            return method;
+        }
+
+        public HttpData setMethod(HttpMethod method) {
+            this.method = method;
             return this;
         }
 
@@ -306,6 +335,7 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
                     .set("stream",    request.getStream())
                     .set("streamConsumer", request.getStreamConsumer())
                     .set("messages", request.getMessages())
+                    .set("tools", request.getTools())
                     .set("config", request.getConfig())
             ;
         }
@@ -314,14 +344,24 @@ public abstract class AbstractHttpApiAIHandler extends AbstractStrategyAIHandler
             ChatResponse.Builder builder = ChatResponse.Builder.of();
             builder.setId(respDict.getString("id"));
             // Convert choices.
-            @SuppressWarnings("rawtypes")
-            List choices = (List) respDict.get("choices");
-            for (Object choice : choices) {
-                Dict    choiceDict = Dict.of(BeanUtils.beanToMap(choice));
+            List<Map<String, Object>> choices = cast(respDict.get("choices"));
+            for (Map<String, Object> choice : choices) {
+                Dict    choiceDict = Dict.of(choice);
                 String  reason = choiceDict.getString("finish_reason");
                 Integer index = choiceDict.getInteger("index");
-                Map<String, Object> messageMap = ObjectUtils.cast(choiceDict.get("message"));
+                Map<String, Object> messageMap = cast(choiceDict.get("message"));
                 Message message = BeanUtils.mapToBean(messageMap, Message.class);
+                message.setToolCalls(new ArrayList<ToolCall>());
+                List<Map<String, Object>> toolCallMaps = cast(messageMap.get("tool_calls"));
+                if (CollectionUtils.isNotEmpty(toolCallMaps)) {
+                    for (Map<String, Object> toolCallMap : toolCallMaps) {
+                        if (MapUtils.isEmpty(toolCallMap)) { continue; }
+                        ToolCall toolCall = BeanUtils.mapToBean(toolCallMap, ToolCall.class);
+                        Map<String, Object> functionMap = cast(toolCallMap.get("function"));
+                        toolCall.setFunction(BeanUtils.mapToBean(functionMap, ToolCall.Function.class));
+                        message.getToolCalls().add(toolCall);
+                    }
+                }
                 builder.addChoice(index, message, reason);
             }
             // Convert usage.

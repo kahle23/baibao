@@ -7,6 +7,7 @@ package baibao.ai.support.azure;
 
 import baibao.ai.support.AbstractHttpApiAIHandler;
 import kunlun.data.Dict;
+import kunlun.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +33,10 @@ public abstract class AbstractAzureOpenAIHandler extends AbstractHttpApiAIHandle
 
     @Override
     public Object execute(Object input, String operation, Class<?> clazz) {
-        if ("chat".equals(operation)) {
+        if (StringUtils.isBlank(operation) || AIMethods.CHAT.equals(operation)) {
             return chat(input, operation, clazz);
         }
-        else if ("embeddings".equals(operation)) {
+        else if (AIMethods.EMBEDDINGS.equals(operation)) {
             return embeddings(input, operation, clazz);
         }
         else {
@@ -60,8 +61,8 @@ public abstract class AbstractAzureOpenAIHandler extends AbstractHttpApiAIHandle
                 , Tool.ME.getEndpoint(config), inputDict.getString(MODEL_KEY), config.getApiVersion()
         );
         // Invoke http.
-        Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR).setUrl(url)
+        Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config).setHttpType(FOUR)
+                .setValidateCertificate(false).setMethod(POST).setUrl(url)
                 .setHeaders(Dict.of("api-key", config.getApiKey()))
                 .setData(inputDict));
         // Handle output.
@@ -79,8 +80,8 @@ public abstract class AbstractAzureOpenAIHandler extends AbstractHttpApiAIHandle
                 , Tool.ME.getEndpoint(config), inputDict.getString(MODEL_KEY), config.getApiVersion()
         );
         // Invoke http.
-        Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR).setUrl(url)
+        Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config).setHttpType(FOUR)
+                .setValidateCertificate(false).setMethod(POST).setUrl(url)
                 .setHeaders(Dict.of("api-key", config.getApiKey()))
                 .setData(inputDict));
         // Handle output.

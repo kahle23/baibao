@@ -2,6 +2,7 @@ package baibao.ai.support.zhipu;
 
 import baibao.ai.support.AbstractHttpApiAIHandler;
 import kunlun.data.Dict;
+import kunlun.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +23,10 @@ public abstract class AbstractZhipuAIHandler extends AbstractHttpApiAIHandler {
 
     @Override
     public Object execute(Object input, String operation, Class<?> clazz) {
-        if ("chat".equals(operation)) {
+        if (StringUtils.isBlank(operation) || AIMethods.CHAT.equals(operation)) {
             return chat(input, operation, clazz);
         }
-        else if ("embeddings".equals(operation)) {
+        else if (AIMethods.EMBEDDINGS.equals(operation)) {
             return embeddings(input, operation, clazz);
         }
         else {
@@ -46,7 +47,7 @@ public abstract class AbstractZhipuAIHandler extends AbstractHttpApiAIHandler {
         Config config = getConfig(inputDict, operation, clazz);
         // Invoke http.
         Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://open.bigmodel.cn/api/paas/v4/chat/completions")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData(inputDict));
@@ -61,7 +62,7 @@ public abstract class AbstractZhipuAIHandler extends AbstractHttpApiAIHandler {
         Config config = getConfig(inputDict, operation, clazz);
         // Invoke http.
         Dict respDict = doHttp(HttpData.of(Tool.ME).setConfig(config)
-                .setMethod(POST).setHttpType(FOUR)
+                .setHttpType(FOUR).setMethod(POST)
                 .setUrl("https://open.bigmodel.cn/api/paas/v4/embeddings")
                 .setHeaders(Dict.of(AUTHORIZATION_KEY, BEARER_KEY + config.getApiKey()))
                 .setData(inputDict));
