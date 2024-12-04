@@ -1,0 +1,104 @@
+package ${servicePackageName};
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.github.yulichang.base.MPJBaseService;
+import kunlun.common.Page;
+import ${entityPackageName}.${entityClassName};
+import ${paramPackageName}.${paramClassName};
+import ${queryPackageName}.${queryClassName};
+import ${resultPackageName}.${resultClassName};
+
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * $!{table.comment}的服务类.
+ *
+ * @author $!{author}
+ * @since $!{nowDate}
+ */
+public interface ${serviceClassName} extends MPJBaseService<${entityClassName}> {
+
+    /**
+     * 根据ID判断记录是否存在.
+     * @param id 待判断的ID
+     * @return 判断结果
+     */
+    boolean existById(Serializable id);
+
+    /**
+     * 判断Code是否已存在（排除掉输入的ID）.
+     * @param code 待判断的Code
+     * @param id 需要被排除的ID（可以为空）
+     * @return 判断结果
+     */
+    boolean existByCode(String code, Serializable id);
+
+    /**
+     * 增加$!{table.comment}数据.
+     *
+     * @param param 待增加的数据
+     * @return 增加的记录的ID
+     */
+    Long addRecord(${serviceEntityName}Param param);
+
+    /**
+     * 编辑$!{table.comment}数据.
+     *
+     * @param param 待编辑的数据
+     */
+    void editRecord(${serviceEntityName}Param param);
+
+    /**
+     * 根据ID删除$!{table.comment}数据.
+     *
+     * @param recordId $!{table.comment}的ID
+     */
+    void deleteById(Long recordId);
+
+    /**
+     * 批量增加$!{table.comment}数据.
+     * @param params 待批量增加的数据
+     * @return 增加的记录的ID集合
+     */
+    List<Long> batchAdd(List<${serviceEntityName}Param> params);
+
+    /**
+     * 批量编辑$!{table.comment}数据.
+     * @param params 待批量编辑的数据
+     */
+    void batchEdit(List<${serviceEntityName}Param> params);
+
+    /**
+     * 根据ID查询$!{table.comment}数据详情.
+     *
+     * @param recordId $!{table.comment}的ID
+     * @return 查询到的$!{table.comment}详情
+     */
+    ${resultClassName} detailById(Long recordId);
+
+    /**
+     * 根据编码集合批量查询$!{table.comment}数据集合.
+     *
+     * @param codes 编码集合
+     * @return 查询到的$!{table.comment}数据集合
+     */
+    List<${entityClassName}> findByCodes(List<String> codes);
+
+    /**
+     * $!{table.comment}的数据下拉列表
+     *
+     * @param query 查询条件
+     * @return 查询结果
+     */
+    List<${resultClassName}> selectList(${queryClassName} query);
+
+    /**
+     * 分页条件查询$!{table.comment}数据.
+     *
+     * @param query 查询条件
+     * @return 查询结果
+     */
+    Page<${resultClassName}> queryList(${queryClassName} query);
+
+}

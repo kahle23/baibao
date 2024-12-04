@@ -1,0 +1,124 @@
+package ${controllerPackageName};
+
+import cn.hutool.core.collection.CollUtil;
+import kunlun.common.Page;
+import kunlun.common.Result;
+import kunlun.data.Dict;
+import kunlun.data.bean.BeanUtils;
+import kunlun.data.validation.support.javax.group.Create;
+import kunlun.data.validation.support.javax.group.Query;
+import kunlun.data.validation.support.javax.group.Update;
+import kunlun.exception.util.VerifyUtils;
+#if($useLombok)
+import lombok.extern.slf4j.Slf4j;
+#end
+#if(!$useLombok)
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+#end
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ${entityPackageName}.${entityClassName};
+import ${paramPackageName}.${paramClassName};
+import ${queryPackageName}.${queryClassName};
+import ${resultPackageName}.${resultClassName};
+import ${servicePackageName}.${serviceClassName};
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
+
+/**
+ * $!{table.comment}的前端控制器. 【请配置mybatis-plus的逻辑删除（版本3.5以上）；并引入mybatis-plus-join；】
+ *
+ * @author $!{author}
+ * @since $!{nowDate}
+ */
+#if($useLombok)
+@Slf4j
+#end
+@RestController
+@RequestMapping("/${table.name}")
+public class ${controllerClassName} {
+#if(!$useLombok)
+    private static final Logger log = LoggerFactory.getLogger(${controllerClassName}.class);
+#end
+
+    @Resource
+    private ${serviceClassName} ${serviceObjectName};
+
+    /**
+     * 增加$!{table.comment}数据（待完善）
+     *
+     * @param param 待增加的数据
+     * @return 增加的记录的ID
+     */
+    @PostMapping("/add")
+    public Result<Number> add(@RequestBody @Validated ${serviceEntityName}Param param) {
+
+        return Result.success(${serviceObjectName}.addRecord(param));
+    }
+
+    /**
+     * 编辑$!{table.comment}数据（待完善）
+     *
+     * @param param 待编辑的数据
+     * @return 操作结果
+     */
+    @PostMapping("/edit")
+    public Result<Void> edit(@RequestBody @Validated ${serviceEntityName}Param param) {
+        ${serviceObjectName}.editRecord(param);
+        return Result.success();
+    }
+
+    /**
+     * 根据ID删除$!{table.comment}数据记录（待完善）
+     *
+     * @param recordId $!{table.comment}的ID
+     * @return 操作结果
+     */
+    @DeleteMapping("/{recordId}")
+    public Result<Void> delete(@PathVariable("recordId") Long recordId) {
+        ${serviceObjectName}.deleteById(recordId);
+        return Result.success();
+    }
+
+    /**
+     * 根据ID查询$!{table.comment}数据详情（待完善）
+     *
+     * @param recordId $!{table.comment}的ID
+     * @return 查询到的$!{table.comment}详情
+     */
+    @GetMapping("/{recordId}")
+    public Result<${resultClassName}> detail(@PathVariable("recordId") Long recordId) {
+
+        return Result.success(${serviceObjectName}.detailById(recordId));
+    }
+
+    /**
+     * $!{table.comment}的数据下拉列表（待完善）
+     *
+     * @param query 查询条件
+     * @return 查询结果
+     */
+    @PostMapping("/select-list")
+    public Result<List<${resultClassName}>> selectList(@RequestBody @Validated ${queryClassName} query) {
+
+        return Result.success(${serviceObjectName}.selectList(query));
+    }
+
+    /**
+     * 分页条件查询$!{table.comment}数据（待完善）
+     *
+     * @param query 查询条件
+     * @return 查询结果
+     */
+    @PostMapping("/search")
+    public Result<Page<${resultClassName}>> search(@RequestBody @Validated ${queryClassName} query) {
+
+        return Result.success(${serviceObjectName}.queryList(query));
+    }
+
+}
