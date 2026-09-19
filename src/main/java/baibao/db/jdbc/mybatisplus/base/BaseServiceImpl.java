@@ -9,8 +9,6 @@ import baibao.common.dto.DragSortDTO;
 import baibao.common.dto.base.BaseEditParam;
 import baibao.common.dto.base.BaseQuery;
 import baibao.common.enums.QueryMode;
-import kunlun.data.sort.SortField;
-import kunlun.data.sort.SortUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.ObjUtil;
@@ -22,7 +20,12 @@ import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import kunlun.common.Page;
 import kunlun.common.constant.Nil;
 import kunlun.core.function.BiConsumer;
+import kunlun.data.Dict;
 import kunlun.data.bean.BeanUtil;
+import kunlun.data.currency.CurrencyUtil;
+import kunlun.data.currency.model.CurrencyRow;
+import kunlun.data.sort.SortField;
+import kunlun.data.sort.SortUtil;
 import kunlun.db.jdbc.mybatisplus.base.ServiceImpl;
 import kunlun.util.Assert;
 import kunlun.util.PageUtil;
@@ -631,6 +634,8 @@ public abstract class BaseServiceImpl<M extends MPJBaseMapper<T>, T, A, E, Q ext
         if (allowProcess(query)) { processData(query, result.getData()); }
         // 填充数据
         if (allowFill(query)) { fillingData(query, result.getData()); }
+        // 金额多币种显示（未传配置时无操作；字段未命中白名单时跳过该项并告警）
+        if (query.hasCurrencyColumns()) { applyCurrencyConversion(query, result); }
         // 返回
         return result;
     }
@@ -684,6 +689,8 @@ public abstract class BaseServiceImpl<M extends MPJBaseMapper<T>, T, A, E, Q ext
         if (allowProcess(query)) { processData(query, result.getData()); }
         // 填充数据
         if (allowFill(query)) { fillingData(query, result.getData()); }
+        // 金额多币种显示（未传配置时无操作；字段未命中白名单时跳过该项并告警）
+        if (query.hasCurrencyColumns()) { applyCurrencyConversion(query, result); }
         // 返回
         return result;
     }
@@ -753,6 +760,37 @@ public abstract class BaseServiceImpl<M extends MPJBaseMapper<T>, T, A, E, Q ext
     protected boolean applySort(MPJLambdaWrapper<T> wrapper, Class<?> entityClass, List<SortField> sortFields,
                                 Map<String, Object> options) {
         return SortUtil.applySort(wrapper, entityClass, sortFields, options);
+    }
+
+    /**
+     * 应用金额多币种显示：先经 {@link CurrencyUtil#processCurrencyColumns} 纯计算换算出
+     * 各行结果（{@code List<CurrencyRow>}，每行 rowId + 各金额字段的换算结果），
+     * 再由本方法把结果填入 {@code Page.others}（key：{@code currencyRows}）——
+     * 换算归处理器，填充归本钩子，覆写可改挂载位置或结构（如写入行对象）。
+     * <p>基准币种：{@code baseCurrency} 直接值优先，为空按 {@code baseCurrencyField}
+     * （行内币种字段名）反射读各行自己的币种，两者取值皆空白则该行该字段跳过并告警；
+     * 汇率：手输优先，缺省走服务端汇率源（getRate2 → getRate1），均无则跳过该币种并告警；
+     * 金额字段名须为结果 DTO 的数值属性，未命中白名单的项跳过并告警；
+     * 处理器只产出换算结果（币种名称/符号等展示位不产出，避免返回值冗余），
+     * 需要展示信息的由前端按币种字典自行补全。
+     *
+     * @param query 查询对象（携带 currencyColumns 配置）
+     * @param result 分页对象（换算结果的挂载目标）
+     * @return 有任意一行任一字段换算并填入成功返回 true
+     */
+    protected boolean applyCurrencyConversion(Q query, Page<R> result) {
+        // 换算（处理器纯计算，不修改入参）
+        List<CurrencyRow> currencyRows = CurrencyUtil.processCurrencyColumns(
+                query.getCurrencyColumns(), FIELD_ID, result.getData());
+        if (CollUtil.isEmpty(currencyRows)) { return false; }
+        // 填充（挂 Page.others，构造时已初始化，仍做一次兜底）
+        Dict others = result.getOthers();
+        if (others == null) {
+            others = Dict.of();
+            result.setOthers(others);
+        }
+        others.put("currencyRows", currencyRows);
+        return true;
     }
 
     /**

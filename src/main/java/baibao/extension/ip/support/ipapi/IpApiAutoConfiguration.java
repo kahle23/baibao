@@ -8,6 +8,7 @@ package baibao.extension.ip.support.ipapi;
 import baibao.action.util.regex.ReplaceUrlsInJsonByRegexAction;
 import baibao.common.constant.Actions;
 import baibao.extension.tool.countrycode.support.baidubaike.BaiduBaikeCountryCodeAction;
+import baibao.data.currency.support.SimpleCurrencyColumnProcessor;
 import baibao.extension.tool.exchangerate.support.exchangerateapi.ExchangeRateApiAction;
 import baibao.extension.tool.hscode.support.ihscode.IHsCodeQueryAction;
 import baibao.extension.tool.hscode.support.likecha.LikeChaQueryAction;
@@ -17,6 +18,7 @@ import kunlun.cache.CacheUtil;
 import kunlun.cache.support.SimpleCache;
 import kunlun.cache.support.SimpleCacheConfig;
 import kunlun.data.ReferenceType;
+import kunlun.data.currency.CurrencyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -44,6 +46,9 @@ public class IpApiAutoConfiguration implements InitializingBean, DisposableBean 
         ActionUtil.registerAction(Actions.WEATHER_01, new WeatherComCnAction());
 
         ActionUtil.registerAction(Actions.EXCHANGE_RATE_01, new ExchangeRateApiAction());
+
+        // 金额多币种换算的默认处理器（汇率解析走 ExRateUtil.getRate2 → getRate1）
+        CurrencyUtil.setCurrencyColumnProcessor(new SimpleCurrencyColumnProcessor());
 
         ActionUtil.registerAction(Actions.COUNTRY_CODE_01, new BaiduBaikeCountryCodeAction());
 
